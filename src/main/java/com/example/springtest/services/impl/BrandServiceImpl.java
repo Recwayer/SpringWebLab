@@ -6,6 +6,7 @@ import com.example.springtest.models.Brand;
 import com.example.springtest.repositories.BrandRepository;
 import com.example.springtest.services.BrandService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -17,10 +18,16 @@ import java.util.stream.Collectors;
 @Service
 public class BrandServiceImpl implements BrandService {
     private final ModelMapper modelMapper;
-    private final BrandRepository brandRepository;
+    private BrandRepository brandRepository;
 
-    public BrandServiceImpl(ModelMapper modelMapper, BrandRepository brandRepository) {
+    @Autowired
+    public BrandServiceImpl(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
+
+    }
+
+    @Autowired
+    public void setBrandRepository(BrandRepository brandRepository) {
         this.brandRepository = brandRepository;
     }
 
@@ -61,4 +68,5 @@ public class BrandServiceImpl implements BrandService {
             throw new ClientException.NotFoundException("Not Found Brand");
         }
     }
+
 }

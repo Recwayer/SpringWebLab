@@ -11,8 +11,8 @@
     <groupId>com.example</groupId>
     <artifactId>Springtest</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Springtest</name>
-    <description>Springtest</description>
+    <name>SpringTest</name>
+    <description>SpringTest</description>
     <properties>
         <java.version>17</java.version>
     </properties>

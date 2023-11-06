@@ -6,6 +6,7 @@ import com.example.springtest.models.Model;
 import com.example.springtest.repositories.ModelRepository;
 import com.example.springtest.services.ModelService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -17,17 +18,22 @@ import java.util.stream.Collectors;
 @Service
 public class ModelServiceImpl implements ModelService {
     private final ModelMapper modelMapper;
-    private final ModelRepository modelRepository;
+    private ModelRepository modelRepository;
 
-    public ModelServiceImpl(ModelMapper modelMapper, ModelRepository modelRepository) {
+    @Autowired
+    public ModelServiceImpl(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
+    }
+
+    @Autowired
+    public void setModelRepository(ModelRepository modelRepository) {
         this.modelRepository = modelRepository;
     }
 
     @Override
     public ModelDTO register(ModelDTO model) {
         Model m = modelMapper.map(model, Model.class);
-        if (m.getUuid()==null || get(m.getUuid()).isEmpty()) {
+        if (m.getUuid() == null || get(m.getUuid()).isEmpty()) {
             return modelMapper.map(modelRepository.save(m), ModelDTO.class);
         } else {
             throw new ClientException.InvalidInputException("A model with this uuid already exists");

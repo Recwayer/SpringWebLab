@@ -6,6 +6,7 @@ import com.example.springtest.models.Offer;
 import com.example.springtest.repositories.OfferRepository;
 import com.example.springtest.services.OfferService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -17,13 +18,17 @@ import java.util.stream.Collectors;
 @Service
 public class OfferServiceImpl implements OfferService {
     private final ModelMapper modelMapper;
-    private final OfferRepository offerRepository;
+    private OfferRepository offerRepository;
 
-    public OfferServiceImpl(ModelMapper modelMapper, OfferRepository offerRepository) {
+    @Autowired
+    public OfferServiceImpl(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
-        this.offerRepository = offerRepository;
     }
 
+    @Autowired
+    public void setOfferRepository(OfferRepository offerRepository) {
+        this.offerRepository = offerRepository;
+    }
 
     @Override
     public OfferDTO register(OfferDTO offer) {

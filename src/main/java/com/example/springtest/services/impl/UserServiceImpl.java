@@ -3,11 +3,14 @@ package com.example.springtest.services.impl;
 import com.example.springtest.dtos.UserDTO;
 import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.User;
+import com.example.springtest.repositories.OfferRepository;
 import com.example.springtest.repositories.UserRepository;
 import com.example.springtest.services.UserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -17,13 +20,23 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
+    private OfferRepository offerRepository;
 
-    public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository) {
+    @Autowired
+    public UserServiceImpl(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
-        this.userRepository = userRepository;
     }
 
+    @Autowired
+    public void setOfferRepository(OfferRepository offerRepository) {
+        this.offerRepository = offerRepository;
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDTO register(UserDTO user) {
@@ -61,5 +74,15 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new ClientException.NotFoundException("Not Found User");
         }
+    }
+
+    @Override
+    public BigDecimal getTotalAmount(UUID uuid) {
+        Optional<UserDTO> user = get(uuid);
+        BigDecimal total = new BigDecimal(0);
+        if (user.isPresent()) {
+            total = total.add(offerRepository.findSumPriceBySellerUuid(uuid));
+        }
+        return total;
     }
 }

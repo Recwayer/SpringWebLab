@@ -46,8 +46,10 @@ public class DataInitializer implements CommandLineRunner {
         user2 = userService.register(user2);
         OfferDTO offer = new OfferDTO(null, new Date(), new Date(), "Description1", Engine.ELECTRIC, "image1.jpg", 10000, new BigDecimal("15000.00"), Transmission.AUTOMATIC, 2022, model.getUuid(), user.getUuid());
         OfferDTO offer2 = new OfferDTO(null, new Date(), new Date(), "Description2", Engine.DIESEL, "image2.jpg", 8000, new BigDecimal("18000.00"), Transmission.MANUAL, 2020, model2.getUuid(), user2.getUuid());
+        OfferDTO offer3 = new OfferDTO(null, new Date(), new Date(), "Description3", Engine.DIESEL, "image3.jpg", 8000, new BigDecimal("20000.00"), Transmission.MANUAL, 2020, model2.getUuid(), user2.getUuid());
         offer = offerService.register(offer);
         offer2 = offerService.register(offer2);
+        offer3 = offerService.register(offer3);
         brand = brandService.update(brand);
         userService.getAll().forEach(System.out::println);
 //        brandService.delete(brand2.getUuid());

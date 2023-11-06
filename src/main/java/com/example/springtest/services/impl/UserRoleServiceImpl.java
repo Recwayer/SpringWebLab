@@ -6,6 +6,7 @@ import com.example.springtest.models.UserRole;
 import com.example.springtest.repositories.UserRoleRepository;
 import com.example.springtest.services.UserRoleService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,14 +17,17 @@ import java.util.stream.Collectors;
 @Service
 public class UserRoleServiceImpl implements UserRoleService {
     private final ModelMapper modelMapper;
-    private final UserRoleRepository userRoleRepository;
+    private UserRoleRepository userRoleRepository;
 
-    public UserRoleServiceImpl(ModelMapper modelMapper, UserRoleRepository userRoleRepository) {
+    @Autowired
+    public UserRoleServiceImpl(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
-        this.userRoleRepository = userRoleRepository;
-
     }
 
+    @Autowired
+    public void setUserRoleRepository(UserRoleRepository userRoleRepository) {
+        this.userRoleRepository = userRoleRepository;
+    }
 
     @Override
     public UserRoleDTO register(UserRoleDTO userRole) {
