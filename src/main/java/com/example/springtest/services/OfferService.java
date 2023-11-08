@@ -8,9 +8,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface OfferService {
-    OfferDTO register(OfferDTO offer);
+    OfferDTO register(OfferDTO dto);
     List<OfferDTO> getAll();
     Optional<OfferDTO> get(UUID uuid);
     void delete(UUID uuid);
-    OfferDTO update(OfferDTO offer);
+    OfferDTO update(OfferDTO dto);
 }

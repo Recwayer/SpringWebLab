@@ -2,6 +2,7 @@ package com.example.springtest.dtos;
 
 import com.example.springtest.models.enums.Engine;
 import com.example.springtest.models.enums.Transmission;
+import jakarta.validation.constraints.Min;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -9,8 +10,6 @@ import java.util.UUID;
 
 public class OfferDTO {
    private UUID uuid;
-    private Date created;
-    private Date modified;
     private String description;
     private Engine engine;
     private String image_url;
@@ -24,10 +23,8 @@ public class OfferDTO {
     public OfferDTO() {
     }
 
-    public OfferDTO(UUID uuid, Date created, Date modified, String description, Engine engine, String image_url, long mileage, BigDecimal price, Transmission transmission, int year, UUID modelUuid, UUID sellerUuid) {
+    public OfferDTO(UUID uuid, String description, Engine engine, String image_url, long mileage, BigDecimal price, Transmission transmission, int year, UUID modelUuid, UUID sellerUuid) {
         this.uuid = uuid;
-        this.created = created;
-        this.modified = modified;
         this.description = description;
         this.engine = engine;
         this.image_url = image_url;
@@ -47,21 +44,6 @@ public class OfferDTO {
         this.uuid = uuid;
     }
 
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getModified() {
-        return modified;
-    }
-
-    public void setModified(Date modified) {
-        this.modified = modified;
-    }
 
     public String getDescription() {
         return description;
@@ -86,7 +68,7 @@ public class OfferDTO {
     public void setImage_url(String image_url) {
         this.image_url = image_url;
     }
-
+    @Min(value = 0, message = "Mileage must be more than 0!")
     public long getMileage() {
         return mileage;
     }
@@ -94,7 +76,7 @@ public class OfferDTO {
     public void setMileage(long mileage) {
         this.mileage = mileage;
     }
-
+    @Min(value = 0, message = "Price must be more than 0!")
     public BigDecimal getPrice() {
         return price;
     }
@@ -110,7 +92,7 @@ public class OfferDTO {
     public void setTransmission(Transmission transmission) {
         this.transmission = transmission;
     }
-
+    @Min(value = 0, message = "Year must be more than 0!")
     public int getYear() {
         return year;
     }
@@ -139,8 +121,6 @@ public class OfferDTO {
     public String toString() {
         return "OfferDTO{" +
                 "uuid=" + uuid +
-                ", created=" + created +
-                ", modified=" + modified +
                 ", description='" + description + '\'' +
                 ", engine=" + engine +
                 ", image_url='" + image_url + '\'' +

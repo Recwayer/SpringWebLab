@@ -3,6 +3,8 @@ package com.example.springtest.configs;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import jakarta.validation.Validator;
+import jakarta.validation.Validation;
 
 @Configuration
 public class SpringTestApplicationConfiguration {
@@ -15,8 +17,10 @@ public class SpringTestApplicationConfiguration {
 
         return modelMapper;
     }
-//    @Bean
-//    public Validator validator(){
-//        return Validation
-//    }
+    @Bean
+    public Validator validator(){
+        return Validation
+                .buildDefaultValidatorFactory()
+                .getValidator();
+    }
 }

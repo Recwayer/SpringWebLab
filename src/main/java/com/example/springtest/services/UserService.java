@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService {
-    UserDTO register(UserDTO user);
+    UserDTO register(UserDTO dto);
 
     List<UserDTO> getAll();
 
@@ -16,7 +16,7 @@ public interface UserService {
 
     void delete(UUID uuid);
 
-    UserDTO update(UserDTO user);
+    UserDTO update(UserDTO dto);
 
     BigDecimal getTotalAmount(UUID uuid);
 }

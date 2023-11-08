@@ -1,21 +1,22 @@
 package com.example.springtest.dtos;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
+
 import java.util.Date;
 import java.util.UUID;
 
 public class BrandDTO {
     private UUID uuid;
-    private Date created;
-    private Date modified;
+
     private String name;
 
     public BrandDTO() {
     }
 
-    public BrandDTO(UUID uuid, Date created, Date modified, String name) {
+    public BrandDTO(UUID uuid, String name) {
         this.uuid = uuid;
-        this.created = created;
-        this.modified = modified;
         this.name = name;
     }
 
@@ -26,23 +27,9 @@ public class BrandDTO {
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getModified() {
-        return modified;
-    }
-
-    public void setModified(Date modified) {
-        this.modified = modified;
-    }
-
+    @NotNull
+    @NotEmpty
+    @Length(min = 2, message = "Name length must be more than two characters!")
     public String getName() {
         return name;
     }
@@ -51,5 +38,11 @@ public class BrandDTO {
         this.name = name;
     }
 
-
+    @Override
+    public String toString() {
+        return "BrandDTO{" +
+                "uuid=" + uuid +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

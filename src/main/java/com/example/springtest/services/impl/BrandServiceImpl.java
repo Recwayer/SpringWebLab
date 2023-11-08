@@ -5,24 +5,25 @@ import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.Brand;
 import com.example.springtest.repositories.BrandRepository;
 import com.example.springtest.services.BrandService;
+import com.example.springtest.utils.ValidationUtil;
+import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class BrandServiceImpl implements BrandService {
     private final ModelMapper modelMapper;
+    private final ValidationUtil validationUtil;
     private BrandRepository brandRepository;
 
     @Autowired
-    public BrandServiceImpl(ModelMapper modelMapper) {
+    public BrandServiceImpl(ModelMapper modelMapper, ValidationUtil validationUtil) {
         this.modelMapper = modelMapper;
+        this.validationUtil = validationUtil;
 
     }
 
@@ -32,12 +33,25 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public BrandDTO register(BrandDTO brand) {
-        Brand b = modelMapper.map(brand, Brand.class);
-        if (b.getUuid() == null || get(b.getUuid()).isEmpty()) {
-            return modelMapper.map(brandRepository.save(b), BrandDTO.class);
+    public BrandDTO register(BrandDTO dto) {
+        if (!this.validationUtil.isValid(dto)) {
+            this.validationUtil
+                    .violations(dto)
+                    .stream()
+                    .map(ConstraintViolation::getMessage).forEach(s -> {
+                        System.out.println(s);
+                        throw new ClientException.InvalidInputException(s);
+                    });
+            return null;
         } else {
-            throw new ClientException.InvalidInputException("A brand with this uuid already exists");
+            Brand brand = modelMapper.map(dto, Brand.class);
+            if (brand.getUuid() == null || get(brand.getUuid()).isEmpty()) {
+                brand.setCreated(new Date());
+                brand.setModified(new Date());
+                return modelMapper.map(brandRepository.save(brand), BrandDTO.class);
+            } else {
+                throw new ClientException.InvalidInputException("A brand with this uuid already exists");
+            }
         }
     }
 
@@ -59,13 +73,24 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public BrandDTO update(BrandDTO brand) {
-        if (brandRepository.findById(brand.getUuid()).isPresent()) {
-            Brand b = modelMapper.map(brand, Brand.class);
-            b.setModified(new Date());
-            return modelMapper.map(brandRepository.save(b), BrandDTO.class);
+    public BrandDTO update(BrandDTO dto) {
+        if (!this.validationUtil.isValid(dto)) {
+            this.validationUtil
+                    .violations(dto)
+                    .stream()
+                    .map(ConstraintViolation::getMessage).forEach(s -> {
+                        System.out.println(s);
+                        throw new ClientException.InvalidInputException(s);
+                    });
+            return null;
         } else {
-            throw new ClientException.NotFoundException("Not Found Brand");
+            if (brandRepository.findById(dto.getUuid()).isPresent()) {
+                Brand brand = modelMapper.map(dto, Brand.class);
+                brand.setModified(new Date());
+                return modelMapper.map(brandRepository.save(brand), BrandDTO.class);
+            } else {
+                throw new ClientException.NotFoundException("Not Found Brand");
+            }
         }
     }
 

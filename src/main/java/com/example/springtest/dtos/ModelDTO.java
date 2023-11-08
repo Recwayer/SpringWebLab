@@ -1,13 +1,16 @@
 package com.example.springtest.dtos;
 
 import com.example.springtest.models.enums.Category;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
+
 import java.util.Date;
 import java.util.UUID;
 
 public class ModelDTO {
     private UUID uuid;
-    private Date created;
-    private Date modified;
     private String name;
     private Category category;
     private String image_url;
@@ -18,10 +21,8 @@ public class ModelDTO {
     public ModelDTO() {
     }
 
-    public ModelDTO(UUID uuid, Date created, Date modified, String name, Category category, String image_url, int startYear, int endYear, UUID brandUuId) {
+    public ModelDTO(UUID uuid, String name, Category category, String image_url, int startYear, int endYear, UUID brandUuId) {
         this.uuid = uuid;
-        this.created = created;
-        this.modified = modified;
         this.name = name;
         this.category = category;
         this.image_url = image_url;
@@ -37,23 +38,9 @@ public class ModelDTO {
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getModified() {
-        return modified;
-    }
-
-    public void setModified(Date modified) {
-        this.modified = modified;
-    }
-
+    @NotNull
+    @NotEmpty
+    @Length(min = 2, message = "Name length must be more than two characters!")
     public String getName() {
         return name;
     }
@@ -78,6 +65,7 @@ public class ModelDTO {
         this.image_url = image_url;
     }
 
+    @Min(value = 0, message = "StartYear must be more than 0!")
     public int getStartYear() {
         return startYear;
     }
@@ -85,7 +73,7 @@ public class ModelDTO {
     public void setStartYear(int startYear) {
         this.startYear = startYear;
     }
-
+    @Min(value = 0, message = "EndYear must be more than 0!")
     public int getEndYear() {
         return endYear;
     }
@@ -106,8 +94,6 @@ public class ModelDTO {
     public String toString() {
         return "ModelDTO{" +
                 "uuid=" + uuid +
-                ", created=" + created +
-                ", modified=" + modified +
                 ", name='" + name + '\'' +
                 ", category=" + category +
                 ", image_url='" + image_url + '\'' +

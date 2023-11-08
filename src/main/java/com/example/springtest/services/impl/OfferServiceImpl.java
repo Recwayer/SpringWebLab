@@ -5,6 +5,8 @@ import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.Offer;
 import com.example.springtest.repositories.OfferRepository;
 import com.example.springtest.services.OfferService;
+import com.example.springtest.utils.ValidationUtil;
+import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +20,12 @@ import java.util.stream.Collectors;
 @Service
 public class OfferServiceImpl implements OfferService {
     private final ModelMapper modelMapper;
+    private final ValidationUtil validationUtil;
     private OfferRepository offerRepository;
 
     @Autowired
-    public OfferServiceImpl(ModelMapper modelMapper) {
+    public OfferServiceImpl(ModelMapper modelMapper, ValidationUtil validationUtil) {
+        this.validationUtil = validationUtil;
         this.modelMapper = modelMapper;
     }
 
@@ -31,12 +35,25 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public OfferDTO register(OfferDTO offer) {
-        Offer o = modelMapper.map(offer, Offer.class);
-        if (o.getUuid() == null || get(o.getUuid()).isEmpty()) {
-            return modelMapper.map(offerRepository.save(o), OfferDTO.class);
+    public OfferDTO register(OfferDTO dto) {
+        if (!this.validationUtil.isValid(dto)) {
+            this.validationUtil
+                    .violations(dto)
+                    .stream()
+                    .map(ConstraintViolation::getMessage).forEach(s -> {
+                        System.out.println(s);
+                        throw new ClientException.InvalidInputException(s);
+                    });
+            return null;
         } else {
-            throw new ClientException.InvalidInputException("A offer with this uuid already exists");
+            Offer offer = modelMapper.map(dto, Offer.class);
+            if (offer.getUuid() == null || get(offer.getUuid()).isEmpty()) {
+                offer.setCreated(new Date());
+                offer.setModified(new Date());
+                return modelMapper.map(offerRepository.save(offer), OfferDTO.class);
+            } else {
+                throw new ClientException.InvalidInputException("A offer with this uuid already exists");
+            }
         }
     }
 
@@ -58,13 +75,24 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public OfferDTO update(OfferDTO offer) {
-        if (offerRepository.findById(offer.getUuid()).isPresent()) {
-            Offer o = modelMapper.map(offer, Offer.class);
-            o.setModified(new Date());
-            return modelMapper.map(offerRepository.save(o), OfferDTO.class);
+    public OfferDTO update(OfferDTO dto) {
+        if (!this.validationUtil.isValid(dto)) {
+            this.validationUtil
+                    .violations(dto)
+                    .stream()
+                    .map(ConstraintViolation::getMessage).forEach(s -> {
+                        System.out.println(s);
+                        throw new ClientException.InvalidInputException(s);
+                    });
+            return null;
         } else {
-            throw new ClientException.NotFoundException("Not Found Offer");
+            if (offerRepository.findById(dto.getUuid()).isPresent()) {
+                Offer offer = modelMapper.map(dto, Offer.class);
+                offer.setModified(new Date());
+                return modelMapper.map(offerRepository.save(offer), OfferDTO.class);
+            } else {
+                throw new ClientException.NotFoundException("Not Found Offer");
+            }
         }
     }
 }

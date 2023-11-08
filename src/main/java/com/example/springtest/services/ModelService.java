@@ -7,9 +7,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ModelService {
-    ModelDTO register(ModelDTO model);
+    ModelDTO register(ModelDTO dto);
     List<ModelDTO> getAll();
     Optional<ModelDTO> get(UUID uuid);
     void delete(UUID uuid);
-    ModelDTO update(ModelDTO model);
+    ModelDTO update(ModelDTO dto);
 }

@@ -1,13 +1,15 @@
 package com.example.springtest.dtos;
 
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
+
 import java.util.Date;
 import java.util.UUID;
 
 public class UserDTO {
     private UUID uuid;
-    private Date created;
-    private Date modified;
     private String username;
     private String password;
     private String firstName;
@@ -19,10 +21,8 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO(UUID uuid, Date created, Date modified, String username, String password, String firstName, String lastName, boolean is_active, UUID roleUuid, String image_url) {
+    public UserDTO(UUID uuid, String username, String password, String firstName, String lastName, boolean is_active, UUID roleUuid, String image_url) {
         this.uuid = uuid;
-        this.created = created;
-        this.modified = modified;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -40,22 +40,9 @@ public class UserDTO {
         this.uuid = uuid;
     }
 
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getModified() {
-        return modified;
-    }
-
-    public void setModified(Date modified) {
-        this.modified = modified;
-    }
-
+    @NotNull
+    @NotEmpty
+    @Length(min = 2, message = "Username length must be more than two characters!")
     public String getUsername() {
         return username;
     }
@@ -63,7 +50,9 @@ public class UserDTO {
     public void setUsername(String username) {
         this.username = username;
     }
-
+    @NotNull
+    @NotEmpty
+    @Length(min = 2, message = "Password length must be more than two characters!")
     public String getPassword() {
         return password;
     }
@@ -71,7 +60,9 @@ public class UserDTO {
     public void setPassword(String password) {
         this.password = password;
     }
-
+    @NotNull
+    @NotEmpty
+    @Length(min = 2, message = "First name length must be more than two characters!")
     public String getFirstName() {
         return firstName;
     }
@@ -79,7 +70,9 @@ public class UserDTO {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-
+    @NotNull
+    @NotEmpty
+    @Length(min = 2, message = "Last name length must be more than two characters!")
     public String getLastName() {
         return lastName;
     }
@@ -116,8 +109,6 @@ public class UserDTO {
     public String toString() {
         return "UserDTO{" +
                 "uuid=" + uuid +
-                ", created=" + created +
-                ", modified=" + modified +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +

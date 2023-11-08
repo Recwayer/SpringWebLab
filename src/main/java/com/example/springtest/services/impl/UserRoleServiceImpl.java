@@ -5,6 +5,8 @@ import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.UserRole;
 import com.example.springtest.repositories.UserRoleRepository;
 import com.example.springtest.services.UserRoleService;
+import com.example.springtest.utils.ValidationUtil;
+import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,11 +19,13 @@ import java.util.stream.Collectors;
 @Service
 public class UserRoleServiceImpl implements UserRoleService {
     private final ModelMapper modelMapper;
+    private final ValidationUtil validationUtil;
     private UserRoleRepository userRoleRepository;
 
     @Autowired
-    public UserRoleServiceImpl(ModelMapper modelMapper) {
+    public UserRoleServiceImpl(ModelMapper modelMapper, ValidationUtil validationUtil) {
         this.modelMapper = modelMapper;
+        this.validationUtil = validationUtil;
     }
 
     @Autowired
@@ -30,12 +34,23 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public UserRoleDTO register(UserRoleDTO userRole) {
-        UserRole ur = modelMapper.map(userRole, UserRole.class);
-        if (ur.getUuid() == null || get(ur.getUuid()).isEmpty()) {
-            return modelMapper.map(userRoleRepository.save(ur), UserRoleDTO.class);
+    public UserRoleDTO register(UserRoleDTO dto) {
+        if (!this.validationUtil.isValid(dto)) {
+            this.validationUtil
+                    .violations(dto)
+                    .stream()
+                    .map(ConstraintViolation::getMessage).forEach(s -> {
+                        System.out.println(s);
+                        throw new ClientException.InvalidInputException(s);
+                    });
+            return null;
         } else {
-            throw new ClientException.InvalidInputException("A role with this uuid already exists");
+            UserRole userRole = modelMapper.map(dto, UserRole.class);
+            if (userRole.getUuid() == null || get(userRole.getUuid()).isEmpty()) {
+                return modelMapper.map(userRoleRepository.save(userRole), UserRoleDTO.class);
+            } else {
+                throw new ClientException.InvalidInputException("A role with this uuid already exists");
+            }
         }
     }
 
@@ -57,11 +72,22 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public UserRoleDTO update(UserRoleDTO userRole) {
-        if (userRoleRepository.findById(userRole.getUuid()).isPresent()) {
-            return modelMapper.map(userRoleRepository.save(modelMapper.map(userRole, UserRole.class)), UserRoleDTO.class);
+    public UserRoleDTO update(UserRoleDTO dto) {
+        if (!this.validationUtil.isValid(dto)) {
+            this.validationUtil
+                    .violations(dto)
+                    .stream()
+                    .map(ConstraintViolation::getMessage).forEach(s -> {
+                        System.out.println(s);
+                        throw new ClientException.InvalidInputException(s);
+                    });
+            return null;
         } else {
-            throw new ClientException.NotFoundException("Not Found Role");
+            if (userRoleRepository.findById(dto.getUuid()).isPresent()) {
+                return modelMapper.map(userRoleRepository.save(modelMapper.map(dto, UserRole.class)), UserRoleDTO.class);
+            } else {
+                throw new ClientException.NotFoundException("Not Found Role");
+            }
         }
     }
 }

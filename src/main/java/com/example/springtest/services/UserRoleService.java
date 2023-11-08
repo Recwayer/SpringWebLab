@@ -7,9 +7,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UserRoleService {
-    UserRoleDTO register(UserRoleDTO userRole);
+    UserRoleDTO register(UserRoleDTO dto);
     List<UserRoleDTO> getAll();
     Optional<UserRoleDTO> get(UUID uuid);
     void delete(UUID uuid);
-    UserRoleDTO update(UserRoleDTO userRole);
+    UserRoleDTO update(UserRoleDTO dto);
 }

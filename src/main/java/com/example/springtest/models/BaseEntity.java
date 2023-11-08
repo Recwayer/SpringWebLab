@@ -8,10 +8,7 @@ import java.util.UUID;
 
 @MappedSuperclass
 public abstract class BaseEntity {
-    @Id
-    @UuidGenerator()
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "uuid")
+
     protected UUID uuid;
     protected Date created;
     protected Date modified;
@@ -25,7 +22,10 @@ public abstract class BaseEntity {
     public void setModified(Date modified) {
         this.modified = modified;
     }
-
+    @Id
+    @UuidGenerator()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "uuid")
     public UUID getUuid() {
         return uuid;
     }

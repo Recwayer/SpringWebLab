@@ -7,9 +7,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BrandService {
-    BrandDTO register(BrandDTO brand);
+    BrandDTO register(BrandDTO dto);
     List<BrandDTO> getAll();
     Optional<BrandDTO> get(UUID uuid);
     void delete(UUID uuid);
-    BrandDTO update(BrandDTO brand);
+    BrandDTO update(BrandDTO dto);
 }

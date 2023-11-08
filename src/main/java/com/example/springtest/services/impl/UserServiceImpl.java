@@ -6,6 +6,8 @@ import com.example.springtest.models.User;
 import com.example.springtest.repositories.OfferRepository;
 import com.example.springtest.repositories.UserRepository;
 import com.example.springtest.services.UserService;
+import com.example.springtest.utils.ValidationUtil;
+import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +22,14 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
+    private final ValidationUtil validationUtil;
     private UserRepository userRepository;
     private OfferRepository offerRepository;
 
     @Autowired
-    public UserServiceImpl(ModelMapper modelMapper) {
+    public UserServiceImpl(ModelMapper modelMapper, ValidationUtil validationUtil) {
         this.modelMapper = modelMapper;
+        this.validationUtil = validationUtil;
     }
 
     @Autowired
@@ -39,12 +43,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO register(UserDTO user) {
-        User u = modelMapper.map(user, User.class);
-        if (u.getUuid() == null || get(u.getUuid()).isEmpty()) {
-            return modelMapper.map(userRepository.save(u), UserDTO.class);
+    public UserDTO register(UserDTO dto) {
+        if (!this.validationUtil.isValid(dto)) {
+            this.validationUtil
+                    .violations(dto)
+                    .stream()
+                    .map(ConstraintViolation::getMessage).forEach(s -> {
+                        System.out.println(s);
+                        throw new ClientException.InvalidInputException(s);
+                    });
+            return null;
         } else {
-            throw new ClientException.InvalidInputException("A user with this uuid already exists");
+            User user = modelMapper.map(dto, User.class);
+            if (user.getUuid() == null || get(user.getUuid()).isEmpty()) {
+                user.setCreated(new Date());
+                user.setModified(new Date());
+                return modelMapper.map(userRepository.save(user), UserDTO.class);
+            } else {
+                throw new ClientException.InvalidInputException("A user with this uuid already exists");
+            }
         }
     }
 
@@ -66,13 +83,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO update(UserDTO user) {
-        if (userRepository.findById(user.getUuid()).isPresent()) {
-            User u = modelMapper.map(user, User.class);
-            u.setModified(new Date());
-            return modelMapper.map(userRepository.save(u), UserDTO.class);
+    public UserDTO update(UserDTO dto) {
+        if (!this.validationUtil.isValid(dto)) {
+            this.validationUtil
+                    .violations(dto)
+                    .stream()
+                    .map(ConstraintViolation::getMessage).forEach(s -> {
+                        System.out.println(s);
+                        throw new ClientException.InvalidInputException(s);
+                    });
+            return null;
         } else {
-            throw new ClientException.NotFoundException("Not Found User");
+            if (userRepository.findById(dto.getUuid()).isPresent()) {
+                User user = modelMapper.map(dto, User.class);
+                user.setModified(new Date());
+                return modelMapper.map(userRepository.save(user), UserDTO.class);
+            } else {
+                throw new ClientException.NotFoundException("Not Found User");
+            }
         }
     }
 

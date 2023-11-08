@@ -5,6 +5,8 @@ import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.Model;
 import com.example.springtest.repositories.ModelRepository;
 import com.example.springtest.services.ModelService;
+import com.example.springtest.utils.ValidationUtil;
+import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,11 +20,13 @@ import java.util.stream.Collectors;
 @Service
 public class ModelServiceImpl implements ModelService {
     private final ModelMapper modelMapper;
+    private final ValidationUtil validationUtil;
     private ModelRepository modelRepository;
 
     @Autowired
-    public ModelServiceImpl(ModelMapper modelMapper) {
+    public ModelServiceImpl(ModelMapper modelMapper, ValidationUtil validationUtil) {
         this.modelMapper = modelMapper;
+        this.validationUtil = validationUtil;
     }
 
     @Autowired
@@ -31,12 +35,25 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    public ModelDTO register(ModelDTO model) {
-        Model m = modelMapper.map(model, Model.class);
-        if (m.getUuid() == null || get(m.getUuid()).isEmpty()) {
-            return modelMapper.map(modelRepository.save(m), ModelDTO.class);
+    public ModelDTO register(ModelDTO dto) {
+        if (!this.validationUtil.isValid(dto)) {
+            this.validationUtil
+                    .violations(dto)
+                    .stream()
+                    .map(ConstraintViolation::getMessage).forEach(s -> {
+                        System.out.println(s);
+                        throw new ClientException.InvalidInputException(s);
+                    });
+            return null;
         } else {
-            throw new ClientException.InvalidInputException("A model with this uuid already exists");
+            Model model = modelMapper.map(dto, Model.class);
+            if (model.getUuid() == null || get(model.getUuid()).isEmpty()) {
+                model.setCreated(new Date());
+                model.setModified(new Date());
+                return modelMapper.map(modelRepository.save(model), ModelDTO.class);
+            } else {
+                throw new ClientException.InvalidInputException("A model with this uuid already exists");
+            }
         }
     }
 
@@ -58,13 +75,24 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    public ModelDTO update(ModelDTO model) {
-        if (modelRepository.findById(model.getUuid()).isPresent()) {
-            Model m = modelMapper.map(model, Model.class);
-            m.setModified(new Date());
-            return modelMapper.map(modelRepository.save(m), ModelDTO.class);
+    public ModelDTO update(ModelDTO dto) {
+        if (!this.validationUtil.isValid(dto)) {
+            this.validationUtil
+                    .violations(dto)
+                    .stream()
+                    .map(ConstraintViolation::getMessage).forEach(s -> {
+                        System.out.println(s);
+                        throw new ClientException.InvalidInputException(s);
+                    });
+            return null;
         } else {
-            throw new ClientException.NotFoundException("Not Found Model");
+            if (modelRepository.findById(dto.getUuid()).isPresent()) {
+                Model model = modelMapper.map(dto, Model.class);
+                model.setModified(new Date());
+                return modelMapper.map(modelRepository.save(model), ModelDTO.class);
+            } else {
+                throw new ClientException.NotFoundException("Not Found Model");
+            }
         }
     }
 }
