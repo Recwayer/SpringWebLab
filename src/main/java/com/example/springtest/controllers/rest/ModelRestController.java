@@ -1,4 +1,4 @@
-package com.example.springtest.controllers.Rest;
+package com.example.springtest.controllers.rest;
 
 import com.example.springtest.dtos.ModelDTO;
 import com.example.springtest.exceptions.ClientException;
@@ -12,10 +12,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/model")
 public class ModelRestController {
-    private final ModelService modelService;
+    private ModelService modelService;
+
 
     @Autowired
-    public ModelRestController(ModelService modelService) {
+    public void setModelService(ModelService modelService) {
         this.modelService = modelService;
     }
 

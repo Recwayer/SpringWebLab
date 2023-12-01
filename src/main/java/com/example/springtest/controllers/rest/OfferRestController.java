@@ -1,4 +1,4 @@
-package com.example.springtest.controllers.Rest;
+package com.example.springtest.controllers.rest;
 
 import com.example.springtest.dtos.OfferDTO;
 import com.example.springtest.exceptions.ClientException;
@@ -12,10 +12,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/offer")
 public class OfferRestController {
-    private final OfferService offerService;
+    private OfferService offerService;
+
 
     @Autowired
-    public OfferRestController(OfferService offerService) {
+    public void setOfferService(OfferService offerService) {
         this.offerService = offerService;
     }
 

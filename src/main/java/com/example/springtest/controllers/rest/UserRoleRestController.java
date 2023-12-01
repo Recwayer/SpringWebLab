@@ -1,4 +1,4 @@
-package com.example.springtest.controllers.Rest;
+package com.example.springtest.controllers.rest;
 
 import com.example.springtest.dtos.UserRoleDTO;
 import com.example.springtest.exceptions.ClientException;
@@ -12,10 +12,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/role")
 public class UserRoleRestController {
-    private final UserRoleService userRoleService;
+    private UserRoleService userRoleService;
 
-    @Autowired
-    public UserRoleRestController(UserRoleService userRoleService) {
+ @Autowired
+    public void setUserRoleService(UserRoleService userRoleService) {
         this.userRoleService = userRoleService;
     }
 

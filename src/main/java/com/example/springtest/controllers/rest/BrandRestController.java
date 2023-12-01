@@ -1,4 +1,4 @@
-package com.example.springtest.controllers.Rest;
+package com.example.springtest.controllers.rest;
 
 import com.example.springtest.dtos.BrandDTO;
 import com.example.springtest.exceptions.ClientException;
@@ -12,10 +12,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/brand")
 public class BrandRestController {
-    private final BrandService brandService;
+    private BrandService brandService;
 
     @Autowired
-    public BrandRestController(BrandService brandService) {
+    public void setBrandService(BrandService brandService) {
         this.brandService = brandService;
     }
 

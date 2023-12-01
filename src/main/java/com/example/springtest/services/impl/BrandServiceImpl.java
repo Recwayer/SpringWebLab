@@ -48,7 +48,7 @@ public class BrandServiceImpl implements BrandService {
             if (brand.getUuid() == null || get(brand.getUuid()).isEmpty()) {
                 brand.setCreated(new Date());
                 brand.setModified(new Date());
-                return modelMapper.map(brandRepository.save(brand), BrandDTO.class);
+                return modelMapper.map(brandRepository.saveAndFlush(brand), BrandDTO.class);
             } else {
                 throw new ClientException.InvalidInputException("A brand with this uuid already exists");
             }
@@ -87,7 +87,7 @@ public class BrandServiceImpl implements BrandService {
             if (brandRepository.findById(dto.getUuid()).isPresent()) {
                 Brand brand = modelMapper.map(dto, Brand.class);
                 brand.setModified(new Date());
-                return modelMapper.map(brandRepository.save(brand), BrandDTO.class);
+                return modelMapper.map(brandRepository.saveAndFlush(brand), BrandDTO.class);
             } else {
                 throw new ClientException.NotFoundException("Not Found Brand");
             }

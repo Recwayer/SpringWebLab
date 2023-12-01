@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
             if (user.getUuid() == null || get(user.getUuid()).isEmpty()) {
                 user.setCreated(new Date());
                 user.setModified(new Date());
-                return modelMapper.map(userRepository.save(user), UserDTO.class);
+                return modelMapper.map(userRepository.saveAndFlush(user), UserDTO.class);
             } else {
                 throw new ClientException.InvalidInputException("A user with this uuid already exists");
             }
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
             if (userRepository.findById(dto.getUuid()).isPresent()) {
                 User user = modelMapper.map(dto, User.class);
                 user.setModified(new Date());
-                return modelMapper.map(userRepository.save(user), UserDTO.class);
+                return modelMapper.map(userRepository.saveAndFlush(user), UserDTO.class);
             } else {
                 throw new ClientException.NotFoundException("Not Found User");
             }

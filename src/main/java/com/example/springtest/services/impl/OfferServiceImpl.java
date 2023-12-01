@@ -50,7 +50,7 @@ public class OfferServiceImpl implements OfferService {
             if (offer.getUuid() == null || get(offer.getUuid()).isEmpty()) {
                 offer.setCreated(new Date());
                 offer.setModified(new Date());
-                return modelMapper.map(offerRepository.save(offer), OfferDTO.class);
+                return modelMapper.map(offerRepository.saveAndFlush(offer), OfferDTO.class);
             } else {
                 throw new ClientException.InvalidInputException("A offer with this uuid already exists");
             }
@@ -89,7 +89,7 @@ public class OfferServiceImpl implements OfferService {
             if (offerRepository.findById(dto.getUuid()).isPresent()) {
                 Offer offer = modelMapper.map(dto, Offer.class);
                 offer.setModified(new Date());
-                return modelMapper.map(offerRepository.save(offer), OfferDTO.class);
+                return modelMapper.map(offerRepository.saveAndFlush(offer), OfferDTO.class);
             } else {
                 throw new ClientException.NotFoundException("Not Found Offer");
             }

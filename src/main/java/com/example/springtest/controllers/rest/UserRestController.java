@@ -1,4 +1,4 @@
-package com.example.springtest.controllers.Rest;
+package com.example.springtest.controllers.rest;
 
 import com.example.springtest.dtos.UserDTO;
 import com.example.springtest.exceptions.ClientException;
@@ -13,10 +13,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/user")
 public class UserRestController {
-    private final UserService userService;
+    private UserService userService;
+
+
 
     @Autowired
-    public UserRestController(UserService userService) {
+    public void setUserService(UserService userService) {
         this.userService = userService;
     }
 

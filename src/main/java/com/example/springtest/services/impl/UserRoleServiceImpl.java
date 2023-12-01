@@ -47,7 +47,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         } else {
             UserRole userRole = modelMapper.map(dto, UserRole.class);
             if (userRole.getUuid() == null || get(userRole.getUuid()).isEmpty()) {
-                return modelMapper.map(userRoleRepository.save(userRole), UserRoleDTO.class);
+                return modelMapper.map(userRoleRepository.saveAndFlush(userRole), UserRoleDTO.class);
             } else {
                 throw new ClientException.InvalidInputException("A role with this uuid already exists");
             }
@@ -84,7 +84,7 @@ public class UserRoleServiceImpl implements UserRoleService {
             return null;
         } else {
             if (userRoleRepository.findById(dto.getUuid()).isPresent()) {
-                return modelMapper.map(userRoleRepository.save(modelMapper.map(dto, UserRole.class)), UserRoleDTO.class);
+                return modelMapper.map(userRoleRepository.saveAndFlush(modelMapper.map(dto, UserRole.class)), UserRoleDTO.class);
             } else {
                 throw new ClientException.NotFoundException("Not Found Role");
             }

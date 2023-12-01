@@ -50,7 +50,7 @@ public class ModelServiceImpl implements ModelService {
             if (model.getUuid() == null || get(model.getUuid()).isEmpty()) {
                 model.setCreated(new Date());
                 model.setModified(new Date());
-                return modelMapper.map(modelRepository.save(model), ModelDTO.class);
+                return modelMapper.map(modelRepository.saveAndFlush(model), ModelDTO.class);
             } else {
                 throw new ClientException.InvalidInputException("A model with this uuid already exists");
             }
@@ -89,7 +89,7 @@ public class ModelServiceImpl implements ModelService {
             if (modelRepository.findById(dto.getUuid()).isPresent()) {
                 Model model = modelMapper.map(dto, Model.class);
                 model.setModified(new Date());
-                return modelMapper.map(modelRepository.save(model), ModelDTO.class);
+                return modelMapper.map(modelRepository.saveAndFlush(model), ModelDTO.class);
             } else {
                 throw new ClientException.NotFoundException("Not Found Model");
             }
