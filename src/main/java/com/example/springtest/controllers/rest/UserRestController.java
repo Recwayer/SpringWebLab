@@ -1,6 +1,6 @@
 package com.example.springtest.controllers.rest;
 
-import com.example.springtest.dtos.UserDTO;
+import com.example.springtest.dtos.api.UserDTO;
 import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

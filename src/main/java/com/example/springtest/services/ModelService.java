@@ -1,6 +1,6 @@
 package com.example.springtest.services;
 
-import com.example.springtest.dtos.ModelDTO;
+import com.example.springtest.dtos.api.ModelDTO;
 
 import java.util.List;
 import java.util.Optional;

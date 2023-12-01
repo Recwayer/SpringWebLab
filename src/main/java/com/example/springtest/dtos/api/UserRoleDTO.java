@@ -1,4 +1,4 @@
-package com.example.springtest.dtos;
+package com.example.springtest.dtos.api;
 
 import com.example.springtest.models.enums.Role;
 

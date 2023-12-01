@@ -1,6 +1,6 @@
 package com.example.springtest;
 
-import com.example.springtest.dtos.*;
+import com.example.springtest.dtos.api.*;
 import com.example.springtest.models.enums.Category;
 import com.example.springtest.models.enums.Engine;
 import com.example.springtest.models.enums.Role;
@@ -11,7 +11,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Component
 public class DataInitializer implements CommandLineRunner {

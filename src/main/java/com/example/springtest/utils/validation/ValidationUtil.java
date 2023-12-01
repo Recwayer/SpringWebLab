@@ -1,4 +1,4 @@
-package com.example.springtest.utils;
+package com.example.springtest.utils.validation;
 
 import jakarta.validation.ConstraintViolation;
 

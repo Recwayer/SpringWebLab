@@ -1,6 +1,6 @@
 package com.example.springtest.controllers.rest;
 
-import com.example.springtest.dtos.UserRoleDTO;
+import com.example.springtest.dtos.api.UserRoleDTO;
 import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.services.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;

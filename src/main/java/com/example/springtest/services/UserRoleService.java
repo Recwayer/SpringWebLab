@@ -1,6 +1,6 @@
 package com.example.springtest.services;
 
-import com.example.springtest.dtos.UserRoleDTO;
+import com.example.springtest.dtos.api.UserRoleDTO;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,11 +1,11 @@
 package com.example.springtest.services.impl;
 
-import com.example.springtest.dtos.UserRoleDTO;
+import com.example.springtest.dtos.api.UserRoleDTO;
 import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.UserRole;
 import com.example.springtest.repositories.UserRoleRepository;
 import com.example.springtest.services.UserRoleService;
-import com.example.springtest.utils.ValidationUtil;
+import com.example.springtest.utils.validation.ValidationUtil;
 import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

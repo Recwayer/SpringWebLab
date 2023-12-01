@@ -1,11 +1,13 @@
 package com.example.springtest.services.impl;
 
-import com.example.springtest.dtos.BrandDTO;
+import com.example.springtest.dtos.api.BrandDTO;
+import com.example.springtest.dtos.web.AddBrandDto;
+import com.example.springtest.dtos.web.ShowBrandInfoDto;
 import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.Brand;
 import com.example.springtest.repositories.BrandRepository;
 import com.example.springtest.services.BrandService;
-import com.example.springtest.utils.ValidationUtil;
+import com.example.springtest.utils.validation.ValidationUtil;
 import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +94,16 @@ public class BrandServiceImpl implements BrandService {
                 throw new ClientException.NotFoundException("Not Found Brand");
             }
         }
+    }
+
+    @Override
+    public void addBrand(AddBrandDto dto) {
+        brandRepository.saveAndFlush(modelMapper.map(dto, Brand.class));
+    }
+
+    @Override
+    public List<ShowBrandInfoDto> getAllBrands() {
+        return brandRepository.findAll().stream().map(b -> modelMapper.map(b, ShowBrandInfoDto.class)).toList();
     }
 
 }

@@ -1,6 +1,6 @@
 package com.example.springtest.services;
 
-import com.example.springtest.dtos.UserDTO;
+import com.example.springtest.dtos.api.UserDTO;
 
 import java.math.BigDecimal;
 import java.util.List;

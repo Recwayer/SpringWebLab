@@ -1,4 +1,4 @@
-package com.example.springtest.dtos;
+package com.example.springtest.dtos.api;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

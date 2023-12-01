@@ -1,5 +1,6 @@
-package com.example.springtest.utils;
+package com.example.springtest.utils.validation;
 
+import com.example.springtest.utils.validation.ValidationUtil;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 @Component
-public class ValidationUtilImpl implements  ValidationUtil{
+public class ValidationUtilImpl implements ValidationUtil {
     private final Validator validator;
 
     @Autowired

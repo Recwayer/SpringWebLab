@@ -1,11 +1,11 @@
 package com.example.springtest.services.impl;
 
-import com.example.springtest.dtos.ModelDTO;
+import com.example.springtest.dtos.api.ModelDTO;
 import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.Model;
 import com.example.springtest.repositories.ModelRepository;
 import com.example.springtest.services.ModelService;
-import com.example.springtest.utils.ValidationUtil;
+import com.example.springtest.utils.validation.ValidationUtil;
 import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

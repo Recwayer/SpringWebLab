@@ -17,10 +17,4 @@ public class SpringTestApplicationConfiguration {
 
         return modelMapper;
     }
-    @Bean
-    public Validator validator(){
-        return Validation
-                .buildDefaultValidatorFactory()
-                .getValidator();
-    }
 }
