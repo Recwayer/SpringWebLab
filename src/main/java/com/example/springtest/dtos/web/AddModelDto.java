@@ -73,4 +73,15 @@ public class AddModelDto {
     public void setEndYear(int endYear) {
         this.endYear = endYear;
     }
+
+    @Override
+    public String toString() {
+        return "AddModelDto{" +
+                "name='" + name + '\'' +
+                ", category=" + category +
+                ", brandName='" + brandName + '\'' +
+                ", startYear=" + startYear +
+                ", endYear=" + endYear +
+                '}';
+    }
 }

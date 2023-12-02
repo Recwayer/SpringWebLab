@@ -106,4 +106,9 @@ public class BrandServiceImpl implements BrandService {
         return brandRepository.findAll().stream().map(b -> modelMapper.map(b, ShowBrandInfoDto.class)).toList();
     }
 
+    @Override
+    public Optional<ShowBrandInfoDto> getDetails(UUID uuid) {
+        return Optional.ofNullable(modelMapper.map(brandRepository.findById(uuid), ShowBrandInfoDto.class));
+    }
+
 }

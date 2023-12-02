@@ -1,17 +1,19 @@
 package com.example.springtest.controllers.web;
 
 import com.example.springtest.dtos.web.AddBrandDto;
+import com.example.springtest.dtos.web.ShowBrandInfoDto;
+import com.example.springtest.exceptions.ServerException;
 import com.example.springtest.services.BrandService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/brand")
@@ -48,5 +50,22 @@ public class BrandController {
     public String showAllBrands(Model model) {
         model.addAttribute("brandInfos", brandService.getAllBrands());
         return "brand-all";
+    }
+
+    @GetMapping("/{uuid}")
+    public String showBrandDetails(@PathVariable("uuid") UUID uuid, Model model) {
+        Optional<ShowBrandInfoDto> optional = brandService.getDetails(uuid);
+        if (optional.isPresent()) {
+            model.addAttribute("brandDetails", optional.get());
+            return "brand-details";
+        } else {
+            throw new ServerException.NotFoundException("brandDetails not found with UUID is" + uuid);
+        }
+    }
+
+    @GetMapping("/delete/{uuid}")
+    public String deleteBrand(@PathVariable("uuid") UUID uuid) {
+        brandService.delete(uuid);
+        return "redirect:/brand/all";
     }
 }

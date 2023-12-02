@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head"/>
+<body class="d-flex flex-column h-100">
+<div th:replace="fragments/navbar">Navbar</div>
+<main class="flex-shrink-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
+                <div class="justify-content-center">
+                    <h1>Add Model</h1>
+                </div>
+                <form th:action="@{/model/add}"
+                      th:method="post"
+                      th:object="${modelModel}"
+                      class="m-md-auto w-50 pb-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="name">Name</label>
+                        <input th:field="*{name}"
+                               th:errorclass="is-invalid"
+                               type="text" class="form-control text-center" id="name" aria-describedby="nameHelp"
+                               name="name"/>
+                        <small th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger">Error
+                            message</small>
+                    </div>
+                    <fieldset class="mb-3">
+                        <legend>Choose Category</legend>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input th:field="*{category}"
+                                       th:value="CAR"
+                                       th:errorclass="is-invalid"
+                                       type="radio" class="form-check-input" name="educationLevel"/>
+                                <span>Car</span>
+                            </label>
+                        </div>
+                        <div class="form-check disabled">
+                            <label class="form-check-label">
+                                <input th:field="*{category}"
+                                       th:value="BUSS"
+                                       th:errorclass="is-invalid"
+                                       type="radio" class="form-check-input" name="educationLevel"/>
+                                <span>Buss</span>
+                            </label>
+                        </div>
+                        <div class="form-check disabled">
+                            <label class="form-check-label">
+                                <input th:field="*{category}"
+                                       th:value="TRUCK"
+                                       th:errorclass="is-invalid"
+                                       type="radio" class="form-check-input " name="educationLevel"/>
+                                <span>Truck</span>
+                            </label>
+                        </div>
+                        <div class="form-check disabled">
+                            <label class="form-check-label">
+                                <input th:field="*{category}"
+                                       th:value="MOTORCYCLE"
+                                       th:errorclass="is-invalid"
+                                       type="radio" class="form-check-input " name="educationLevel"/>
+                                <span>Motorcycle</span>
+                            </label>
+                        </div>
+                        <small th:if="${#fields.hasErrors('category')}" th:errors="*{category}"
+                               class="text-danger">Error message</small>
+                    </fieldset>
+                    <div class="mb-3">
+                        <label class="form-label" for="brand"><h5>All available brands</h5></label>
+                        <select multiple="false" class="form-control text-center"
+                                id="brand" name="name" th:field="*{brandName}">
+                            <option th:each="c : ${availableBrands}"
+                                    th:value="${c.name}"
+                                    th:text="${c.name}">Brand Name
+                            </option>
+                        </select>
+                        <small th:if="${#fields.hasErrors('brandName')}" th:errors="*{brandName}"
+                               class="text-danger">Error
+                            message</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="name">StartYear</label>
+                        <input th:field="*{startYear}"
+                               th:errorclass="is-invalid"
+                               type="text" class="form-control text-center" id="startYear" aria-describedby="nameHelp"
+                               name="name"/>
+                        <small th:if="${#fields.hasErrors('startYear')}" th:errors="*{startYear}" class="text-danger">Error
+                            message</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="name">EndYear</label>
+                        <input th:field="*{endYear}"
+                               th:errorclass="is-invalid"
+                               type="text" class="form-control text-center" id="endYear" aria-describedby="nameHelp"
+                               name="name"/>
+                        <small th:if="${#fields.hasErrors('endYear')}" th:errors="*{endYear}" class="text-danger">Error
+                            message</small>
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Add Model</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="fragments/footer"/>
+</body>
+</html>

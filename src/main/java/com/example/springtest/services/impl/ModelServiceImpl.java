@@ -1,8 +1,12 @@
 package com.example.springtest.services.impl;
 
 import com.example.springtest.dtos.api.ModelDTO;
+import com.example.springtest.dtos.web.AddModelDto;
+import com.example.springtest.dtos.web.ShowDetailedModelInfoDto;
+import com.example.springtest.dtos.web.ShowModelInfoDto;
 import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.Model;
+import com.example.springtest.repositories.BrandRepository;
 import com.example.springtest.repositories.ModelRepository;
 import com.example.springtest.services.ModelService;
 import com.example.springtest.utils.validation.ValidationUtil;
@@ -23,6 +27,8 @@ public class ModelServiceImpl implements ModelService {
     private final ValidationUtil validationUtil;
     private ModelRepository modelRepository;
 
+    private BrandRepository brandRepository;
+
     @Autowired
     public ModelServiceImpl(ModelMapper modelMapper, ValidationUtil validationUtil) {
         this.modelMapper = modelMapper;
@@ -32,6 +38,11 @@ public class ModelServiceImpl implements ModelService {
     @Autowired
     public void setModelRepository(ModelRepository modelRepository) {
         this.modelRepository = modelRepository;
+    }
+
+    @Autowired
+    public void setBrandRepository(BrandRepository brandRepository) {
+        this.brandRepository = brandRepository;
     }
 
     @Override
@@ -94,5 +105,22 @@ public class ModelServiceImpl implements ModelService {
                 throw new ClientException.NotFoundException("Not Found Model");
             }
         }
+    }
+
+    @Override
+    public void addModel(AddModelDto dto) {
+        Model model = modelMapper.map(dto, Model.class);
+        model.setBrand(brandRepository.findByName(dto.getBrandName()).orElse(null));
+        modelRepository.saveAndFlush(model);
+    }
+
+    @Override
+    public List<ShowModelInfoDto> getAllModels() {
+        return modelRepository.findAll().stream().map(m -> modelMapper.map(m, ShowModelInfoDto.class)).toList();
+    }
+
+    @Override
+    public Optional<ShowDetailedModelInfoDto> getDetails(UUID uuid) {
+        return Optional.ofNullable(modelMapper.map(modelRepository.findById(uuid), ShowDetailedModelInfoDto.class));
     }
 }
