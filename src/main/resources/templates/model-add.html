@@ -31,7 +31,7 @@
                                 <input th:field="*{category}"
                                        th:value="CAR"
                                        th:errorclass="is-invalid"
-                                       type="radio" class="form-check-input" name="educationLevel"/>
+                                       type="radio" class="form-check-input" name="category"/>
                                 <span>Car</span>
                             </label>
                         </div>
@@ -40,7 +40,7 @@
                                 <input th:field="*{category}"
                                        th:value="BUSS"
                                        th:errorclass="is-invalid"
-                                       type="radio" class="form-check-input" name="educationLevel"/>
+                                       type="radio" class="form-check-input" name="category"/>
                                 <span>Buss</span>
                             </label>
                         </div>
@@ -49,7 +49,7 @@
                                 <input th:field="*{category}"
                                        th:value="TRUCK"
                                        th:errorclass="is-invalid"
-                                       type="radio" class="form-check-input " name="educationLevel"/>
+                                       type="radio" class="form-check-input " name="category"/>
                                 <span>Truck</span>
                             </label>
                         </div>
@@ -58,7 +58,7 @@
                                 <input th:field="*{category}"
                                        th:value="MOTORCYCLE"
                                        th:errorclass="is-invalid"
-                                       type="radio" class="form-check-input " name="educationLevel"/>
+                                       type="radio" class="form-check-input " name="category"/>
                                 <span>Motorcycle</span>
                             </label>
                         </div>
@@ -79,20 +79,21 @@
                             message</small>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="name">StartYear</label>
+                        <label class="form-label" for="startYear">StartYear</label>
                         <input th:field="*{startYear}"
                                th:errorclass="is-invalid"
-                               type="text" class="form-control text-center" id="startYear" aria-describedby="nameHelp"
-                               name="name"/>
+                               type="text" class="form-control text-center" id="startYear"
+                               aria-describedby="startYearHelp"
+                               name="startYear"/>
                         <small th:if="${#fields.hasErrors('startYear')}" th:errors="*{startYear}" class="text-danger">Error
                             message</small>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="name">EndYear</label>
+                        <label class="form-label" for="endYear">EndYear</label>
                         <input th:field="*{endYear}"
                                th:errorclass="is-invalid"
-                               type="text" class="form-control text-center" id="endYear" aria-describedby="nameHelp"
-                               name="name"/>
+                               type="text" class="form-control text-center" id="endYear" aria-describedby="endYearHelp"
+                               name="endYear"/>
                         <small th:if="${#fields.hasErrors('endYear')}" th:errors="*{endYear}" class="text-danger">Error
                             message</small>
                     </div>

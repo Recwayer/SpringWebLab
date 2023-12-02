@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
 
 public class AddModelDto {
     @UniqueModelName
@@ -14,6 +15,7 @@ public class AddModelDto {
     private String brandName;
     private int startYear;
     private int endYear;
+
 
     public AddModelDto() {
     }
@@ -73,6 +75,7 @@ public class AddModelDto {
     public void setEndYear(int endYear) {
         this.endYear = endYear;
     }
+
 
     @Override
     public String toString() {
