@@ -1,9 +1,11 @@
 package com.example.springtest.dtos.web;
 
-import com.example.springtest.models.UserRole;
+import com.example.springtest.models.enums.Role;
 import com.example.springtest.utils.validation.annotations.UniqueUserName;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 
 public class AddUserDto {
     @UniqueUserName
@@ -15,20 +17,18 @@ public class AddUserDto {
 
     private String lastName;
 
-    private UserRole role;
+    private Role role;
 
-    private boolean is_active;
 
     public AddUserDto() {
     }
 
-    public AddUserDto(String username, String password, String firstName, String lastName, UserRole role, boolean is_active) {
+    public AddUserDto(String username, String password, String firstName, String lastName, Role role) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
-        this.is_active = is_active;
     }
 
     @NotEmpty(message = "Username cannot be null or empty!")
@@ -55,14 +55,13 @@ public class AddUserDto {
         return lastName;
     }
 
-    @NotEmpty(message = "Please choose a Role!")
-    public UserRole getRole() {
+    @NotNull(message = "Role cannot be null or empty!")
+    public Role getRole() {
         return role;
     }
 
-    @NotEmpty(message = "Please choose an active!")
-    public boolean is_active() {
-        return is_active;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public void setUsername(String username) {
@@ -79,13 +78,5 @@ public class AddUserDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
-
-    public void set_active(boolean is_active) {
-        this.is_active = is_active;
     }
 }

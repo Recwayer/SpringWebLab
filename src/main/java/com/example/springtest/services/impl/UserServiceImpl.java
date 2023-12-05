@@ -1,10 +1,14 @@
 package com.example.springtest.services.impl;
 
 import com.example.springtest.dtos.api.UserDTO;
+import com.example.springtest.dtos.web.AddUserDto;
+import com.example.springtest.dtos.web.ShowDetailedUserInfoDto;
+import com.example.springtest.dtos.web.ShowUserInfoDto;
 import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.User;
 import com.example.springtest.repositories.OfferRepository;
 import com.example.springtest.repositories.UserRepository;
+import com.example.springtest.repositories.UserRoleRepository;
 import com.example.springtest.services.UserService;
 import com.example.springtest.utils.validation.ValidationUtil;
 import jakarta.validation.ConstraintViolation;
@@ -24,6 +28,7 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final ValidationUtil validationUtil;
     private UserRepository userRepository;
+    private UserRoleRepository userRoleRepository;
     private OfferRepository offerRepository;
 
     @Autowired
@@ -40,6 +45,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setUserRoleRepository(UserRoleRepository userRoleRepository) {
+        this.userRoleRepository = userRoleRepository;
     }
 
     @Override
@@ -112,5 +122,23 @@ public class UserServiceImpl implements UserService {
             total = total.add(offerRepository.findSumPriceBySellerUuid(uuid));
         }
         return total;
+    }
+
+    @Override
+    public void addUser(AddUserDto dto) {
+        User user = modelMapper.map(dto, User.class);
+        user.setRole(userRoleRepository.findUserRoleByRole(dto.getRole()).get());
+        user.set_active(true);
+        userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public List<ShowUserInfoDto> getAllUsers() {
+        return userRepository.findAll().stream().map(u->modelMapper.map(u, ShowUserInfoDto.class)).toList();
+    }
+
+    @Override
+    public Optional<ShowDetailedUserInfoDto> getDetails(UUID uuid) {
+        return Optional.ofNullable(modelMapper.map(userRepository.findById(uuid), ShowDetailedUserInfoDto.class));
     }
 }

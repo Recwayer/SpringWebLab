@@ -1,6 +1,8 @@
 package com.example.springtest.services;
 
 import com.example.springtest.dtos.api.UserRoleDTO;
+import com.example.springtest.models.UserRole;
+import com.example.springtest.models.enums.Role;
 
 import java.util.List;
 import java.util.Optional;

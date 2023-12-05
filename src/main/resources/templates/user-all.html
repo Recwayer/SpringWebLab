@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head"/>
+<body class="d-flex flex-column h-100">
+<div th:replace="fragments/navbar">Navbar</div>
+<main class="flex-shrink-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
+        <h2 class="text-center text-dark mt-5">All Users</h2>
+        <div th:each="u : ${userInfos}" class="d-flex flex-column bg-text mb-3">
+          <h2 th:text="'Username: '+${u.username}"></h2>
+          <h4 th:text="'Role: '+${u.role}"></h4>
+          <h4><a class="btn-block"
+                 th:href="@{/user/{uuid}(uuid=*{u.uuid})}">Detail
+            info</a></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer th:replace="fragments/footer"/>
+</body>
+</html>
