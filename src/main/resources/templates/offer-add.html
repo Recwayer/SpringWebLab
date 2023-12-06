@@ -9,7 +9,7 @@
             <div class="col-md-2"></div>
             <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
                 <div class="justify-content-center">
-                    <h1>Add Model</h1>
+                    <h1>Add Offer</h1>
                 </div>
                 <form th:action="@{/offer/add}"
                       th:method="post"
@@ -21,7 +21,7 @@
                                th:errorclass="is-invalid"
                                type="text" class="form-control text-center" id="description"
                                aria-describedby="descriptionHelp"
-                               name="description"/>
+                               name="description" required minlength="5"/>
                         <small th:if="${#fields.hasErrors('description')}" th:errors="*{description}"
                                class="text-danger">Error
                             message</small>
@@ -96,7 +96,7 @@
                                th:errorclass="is-invalid"
                                type="number" class="form-control text-center" id="mileage"
                                aria-describedby="mileageHelp"
-                               name="startYear"/>
+                               name="startYear" required min="1"/>
                         <small th:if="${#fields.hasErrors('mileage')}" th:errors="*{mileage}" class="text-danger">Error
                             message</small>
                     </div>
@@ -106,7 +106,7 @@
                                th:value="0"
                                th:errorclass="is-invalid"
                                type="number" class="form-control text-center" id="price" aria-describedby="priceHelp"
-                               name="price"/>
+                               name="price" required min="1" step="any"/>
                         <small th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger">Error
                             message</small>
                     </div>
@@ -115,7 +115,7 @@
                         <input th:field="*{year}"
                                th:errorclass="is-invalid"
                                type="number" class="form-control text-center" id="year" aria-describedby="yearHelp"
-                               name="year"/>
+                               name="year" required min="1"/>
                         <small th:if="${#fields.hasErrors('year')}" th:errors="*{year}" class="text-danger">Error
                             message</small>
                     </div>

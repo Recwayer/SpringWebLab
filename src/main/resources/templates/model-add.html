@@ -20,7 +20,7 @@
                         <input th:field="*{name}"
                                th:errorclass="is-invalid"
                                type="text" class="form-control text-center" id="name" aria-describedby="nameHelp"
-                               name="name"/>
+                               name="name" required minlength="3"/>
                         <small th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger">Error
                             message</small>
                     </div>
@@ -84,7 +84,7 @@
                                th:errorclass="is-invalid"
                                type="number" class="form-control text-center" id="startYear"
                                aria-describedby="startYearHelp"
-                               name="startYear"/>
+                               name="startYear" required min="1"/>
                         <small th:if="${#fields.hasErrors('startYear')}" th:errors="*{startYear}" class="text-danger">Error
                             message</small>
                     </div>
@@ -93,7 +93,7 @@
                         <input th:field="*{endYear}"
                                th:errorclass="is-invalid"
                                type="number" class="form-control text-center" id="endYear" aria-describedby="endYearHelp"
-                               name="endYear"/>
+                               name="endYear" required min="1"/>
                         <small th:if="${#fields.hasErrors('endYear')}" th:errors="*{endYear}" class="text-danger">Error
                             message</small>
                     </div>

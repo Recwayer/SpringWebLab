@@ -1,7 +1,10 @@
 package com.example.springtest.services.impl;
 
 import com.example.springtest.dtos.api.OfferDTO;
-import com.example.springtest.dtos.web.*;
+import com.example.springtest.dtos.web.AddOfferDto;
+import com.example.springtest.dtos.web.ShowDetailedOfferInfoDto;
+import com.example.springtest.dtos.web.ShowOfferInfoDto;
+import com.example.springtest.dtos.web.UpdateOfferDto;
 import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.Offer;
 import com.example.springtest.repositories.ModelRepository;
@@ -112,6 +115,21 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    public UpdateOfferDto update(UUID uuid, UpdateOfferDto dto) {
+        Optional<Offer> optional = offerRepository.findById(uuid);
+        if (optional.isPresent()) {
+            Offer offer = modelMapper.map(dto, Offer.class);
+            offer.setUuid(uuid);
+            offer.setModified(new Date());
+            offer.setModel(modelRepository.findByName(dto.getModelName()).orElse(null));
+            offer.setSeller(userRepository.findByUsername(dto.getSellerUsername()).orElse(null));
+            return modelMapper.map(offerRepository.saveAndFlush(offer), UpdateOfferDto.class);
+        } else {
+            throw new ClientException.NotFoundException("Not Found Model");
+        }
+    }
+
+    @Override
     public void addOffer(AddOfferDto dto) {
         Offer offer = modelMapper.map(dto, Offer.class);
         offer.setCreated(new Date());
@@ -129,5 +147,10 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public Optional<ShowDetailedOfferInfoDto> getDetails(UUID uuid) {
         return Optional.ofNullable(modelMapper.map(offerRepository.findById(uuid), ShowDetailedOfferInfoDto.class));
+    }
+
+    @Override
+    public Optional<UpdateOfferDto> getUpdateOffer(UUID uuid) {
+        return Optional.ofNullable(modelMapper.map(offerRepository.findById(uuid), UpdateOfferDto.class));
     }
 }

@@ -2,6 +2,8 @@ package com.example.springtest.controllers.web;
 
 import com.example.springtest.dtos.web.AddOfferDto;
 import com.example.springtest.dtos.web.ShowDetailedOfferInfoDto;
+import com.example.springtest.dtos.web.UpdateOfferDto;
+import com.example.springtest.dtos.web.UpdateUserDto;
 import com.example.springtest.exceptions.ServerException;
 import com.example.springtest.services.ModelService;
 import com.example.springtest.services.OfferService;
@@ -70,8 +72,26 @@ public class OfferController {
     }
 
     @GetMapping("/delete/{uuid}")
-    public String deleteModel(@PathVariable("uuid") UUID uuid) {
+    public String deleteOffer(@PathVariable("uuid") UUID uuid) {
         offerService.delete(uuid);
         return "redirect:/offer/all";
+    }
+    @GetMapping("/update/{uuid}")
+    public String updateOffer(@PathVariable("uuid") UUID uuid, Model model) {
+        model.addAttribute("availableModels", modelService.getAllModels());
+        model.addAttribute("availableUsers", userService.getAllUsers());
+        model.addAttribute("offerModelUp", offerService.getUpdateOffer(uuid).get());
+        return "offer-update";
+    }
+
+    @PostMapping("/update/{uuid}")
+    public String updateOffer(@PathVariable("uuid") UUID uuid, @Valid UpdateOfferDto offerModelUp, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("offerModelUp", offerModelUp);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.offerModelUp", bindingResult);
+            return String.format("redirect:/offer/update/%s", uuid);
+        }
+        offerService.update(uuid, offerModelUp);
+        return String.format("redirect:/offer/%s", uuid);
     }
 }

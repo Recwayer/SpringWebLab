@@ -19,7 +19,7 @@ public interface UserService {
 
     UserDTO update(UserDTO dto);
 
-    UpdateModelDto update(UUID uuid, UpdateUserDto dto);
+    UpdateUserDto update(UUID uuid, UpdateUserDto dto);
 
     BigDecimal getTotalAmount(UUID uuid);
 

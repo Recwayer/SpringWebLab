@@ -115,7 +115,7 @@ public class ModelServiceImpl implements ModelService {
             Model model = modelMapper.map(dto, Model.class);
             model.setUuid(uuid);
             model.setModified(new Date());
-            model.setBrand(brandRepository.findByName(dto.getBrandName()).get());
+            model.setBrand(brandRepository.findByName(dto.getBrandName()).orElse(null));
             return modelMapper.map(modelRepository.saveAndFlush(model), UpdateModelDto.class);
         } else {
             throw new ClientException.NotFoundException("Not Found Model");

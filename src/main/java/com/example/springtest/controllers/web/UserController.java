@@ -2,6 +2,7 @@ package com.example.springtest.controllers.web;
 
 import com.example.springtest.dtos.web.AddUserDto;
 import com.example.springtest.dtos.web.ShowDetailedUserInfoDto;
+import com.example.springtest.dtos.web.UpdateUserDto;
 import com.example.springtest.exceptions.ServerException;
 import com.example.springtest.services.UserService;
 import jakarta.validation.Valid;
@@ -68,5 +69,21 @@ public class UserController {
     public String deleteUser(@PathVariable("uuid") UUID uuid) {
         userService.delete(uuid);
         return "redirect:/user/all";
+    }
+    @GetMapping("/update/{uuid}")
+    public String updateModel(@PathVariable("uuid") UUID uuid, Model model) {
+        model.addAttribute("userModelUp", userService.getUpdateUser(uuid).get());
+        return "user-update";
+    }
+
+    @PostMapping("/update/{uuid}")
+    public String updateModel(@PathVariable("uuid") UUID uuid, @Valid UpdateUserDto userModelUp, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("userModelUp", userModelUp);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userModelUp", bindingResult);
+            return String.format("redirect:/user/update/%s", uuid);
+        }
+        userService.update(uuid, userModelUp);
+        return String.format("redirect:/user/%s", uuid);
     }
 }

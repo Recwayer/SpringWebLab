@@ -9,18 +9,18 @@
             <div class="col-md-2"></div>
             <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
                 <div class="justify-content-center">
-                    <h1>Add Brand</h1>
+                    <h1>Add User</h1>
                 </div>
                 <form th:action="@{/user/add}"
                       th:method="post"
                       th:object="${userModel}"
                       class="m-md-auto w-50 pb-3">
                     <div class="mb-3">
-                        <label class="form-label" for="name">Name</label>
+                        <label class="form-label" for="name">Username</label>
                         <input th:field="*{username}"
                                th:errorclass="is-invalid"
                                type="text" class="form-control text-center" id="name" aria-describedby="nameHelp"
-                               name="name"/>
+                               name="name" required minlength="3"/>
                         <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger">Error
                             message</small>
                     </div>
@@ -30,7 +30,7 @@
                                th:errorclass="is-invalid"
                                type="text" class="form-control text-center" id="password"
                                aria-describedby="passwordHelp"
-                               name="password"/>
+                               name="password" required minlength="3"/>
                         <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger">Error
                             message</small>
                     </div>
@@ -39,7 +39,7 @@
                         <input th:field="*{firstName}"
                                th:errorclass="is-invalid"
                                type="text" class="form-control text-center"
-                               id="firstName" aria-describedby="firstName" name="firstName"/>
+                               id="firstName" aria-describedby="firstName" name="firstName" required minlength="2"/>
                         <small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger">Error
                             message</small>
                     </div>
@@ -48,7 +48,7 @@
                         <input th:field="*{lastName}"
                                th:errorclass="is-invalid"
                                type="text" class="form-control text-center"
-                               id="lastName" aria-describedby="lastName" name="lastName"/>
+                               id="lastName" aria-describedby="lastName" name="lastName" required minlength="2"/>
                         <small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger">Error
                             message</small>
                     </div>
@@ -75,7 +75,7 @@
                         <small th:if="${#fields.hasErrors('role')}" th:errors="*{role}"
                                class="text-danger">Error message</small>
                     </fieldset>
-                    <button type="submit" class="btn btn-secondary">Add Brand</button>
+                    <button type="submit" class="btn btn-secondary">Add User</button>
                 </form>
             </div>
         </div>

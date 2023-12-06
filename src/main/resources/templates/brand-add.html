@@ -20,7 +20,7 @@
             <input th:field="*{name}"
                    th:errorclass="is-invalid"
                    type="text" class="form-control text-center" id="name" aria-describedby="nameHelp"
-                   name="name"/>
+                   name="name" required minlength="3"/>
             <small th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger">Error
               message</small>
           </div>

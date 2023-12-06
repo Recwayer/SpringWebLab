@@ -1,7 +1,10 @@
 package com.example.springtest.services.impl;
 
 import com.example.springtest.dtos.api.UserDTO;
-import com.example.springtest.dtos.web.*;
+import com.example.springtest.dtos.web.AddUserDto;
+import com.example.springtest.dtos.web.ShowDetailedUserInfoDto;
+import com.example.springtest.dtos.web.ShowUserInfoDto;
+import com.example.springtest.dtos.web.UpdateUserDto;
 import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.User;
 import com.example.springtest.repositories.OfferRepository;
@@ -113,8 +116,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UpdateModelDto update(UUID uuid, UpdateUserDto dto) {
-        return null;
+    public UpdateUserDto update(UUID uuid, UpdateUserDto dto) {
+        Optional<User> optional = userRepository.findById(uuid);
+        if (optional.isPresent()) {
+            User user = modelMapper.map(dto, User.class);
+            user.setUuid(uuid);
+            user.setModified(new Date());
+            user.setRole(userRoleRepository.findUserRoleByRole(dto.getRole()).orElse(null));
+            user.set_active(true);
+            return modelMapper.map(userRepository.saveAndFlush(user), UpdateUserDto.class);
+        } else {
+            throw new ClientException.NotFoundException("Not Found Model");
+        }
     }
 
     @Override
@@ -130,7 +143,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addUser(AddUserDto dto) {
         User user = modelMapper.map(dto, User.class);
-        user.setRole(userRoleRepository.findUserRoleByRole(dto.getRole()).get());
+        user.setRole(userRoleRepository.findUserRoleByRole(dto.getRole()).orElse(null));
         user.setCreated(new Date());
         user.setModified(new Date());
         user.set_active(true);
@@ -139,7 +152,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<ShowUserInfoDto> getAllUsers() {
-        return userRepository.findAll().stream().map(u->modelMapper.map(u, ShowUserInfoDto.class)).toList();
+        return userRepository.findAll().stream().map(u -> modelMapper.map(u, ShowUserInfoDto.class)).toList();
     }
 
     @Override
@@ -149,6 +162,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UpdateUserDto> getUpdateUser(UUID uuid) {
-        return Optional.empty();
+        return Optional.ofNullable(modelMapper.map(userRepository.findById(uuid), UpdateUserDto.class));
     }
 }
