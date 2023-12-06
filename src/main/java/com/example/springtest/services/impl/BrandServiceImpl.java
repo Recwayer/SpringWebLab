@@ -3,6 +3,7 @@ package com.example.springtest.services.impl;
 import com.example.springtest.dtos.api.BrandDTO;
 import com.example.springtest.dtos.web.AddBrandDto;
 import com.example.springtest.dtos.web.ShowBrandInfoDto;
+import com.example.springtest.dtos.web.ShowDetailedBrandInfoDto;
 import com.example.springtest.dtos.web.UpdateBrandDto;
 import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.Brand;
@@ -124,8 +125,8 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Optional<ShowBrandInfoDto> getDetails(UUID uuid) {
-        return Optional.ofNullable(modelMapper.map(brandRepository.findById(uuid), ShowBrandInfoDto.class));
+    public Optional<ShowDetailedBrandInfoDto> getDetails(UUID uuid) {
+        return Optional.ofNullable(modelMapper.map(brandRepository.findById(uuid), ShowDetailedBrandInfoDto.class));
     }
 
     public Optional<UpdateBrandDto> getUpdateBrand(UUID uuid) {

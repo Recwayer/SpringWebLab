@@ -1,10 +1,7 @@
 package com.example.springtest.services;
 
 import com.example.springtest.dtos.api.BrandDTO;
-import com.example.springtest.dtos.web.AddBrandDto;
-import com.example.springtest.dtos.web.ShowBrandInfoDto;
-import com.example.springtest.dtos.web.ShowDetailedModelInfoDto;
-import com.example.springtest.dtos.web.UpdateBrandDto;
+import com.example.springtest.dtos.web.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +24,7 @@ public interface BrandService {
 
     List<ShowBrandInfoDto> getAllBrands();
 
-    Optional<ShowBrandInfoDto> getDetails(UUID uuid);
+    Optional<ShowDetailedBrandInfoDto> getDetails(UUID uuid);
 
     Optional<UpdateBrandDto> getUpdateBrand(UUID uuid);
 }

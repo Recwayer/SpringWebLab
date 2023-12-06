@@ -26,4 +26,6 @@ public interface ModelService {
     Optional<ShowDetailedModelInfoDto> getDetails(UUID uuid);
 
     Optional<UpdateModelDto> getUpdateModel(UUID uuid);
+
+    List<ShowModelInfoDto> searchModels(String searchQuery);
 }

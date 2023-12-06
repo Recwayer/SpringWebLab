@@ -1,7 +1,7 @@
 package com.example.springtest.controllers.web;
 
 import com.example.springtest.dtos.web.AddBrandDto;
-import com.example.springtest.dtos.web.ShowBrandInfoDto;
+import com.example.springtest.dtos.web.ShowDetailedBrandInfoDto;
 import com.example.springtest.dtos.web.UpdateBrandDto;
 import com.example.springtest.exceptions.ServerException;
 import com.example.springtest.services.BrandService;
@@ -55,7 +55,7 @@ public class BrandController {
 
     @GetMapping("/{uuid}")
     public String showBrandDetails(@PathVariable("uuid") UUID uuid, Model model) {
-        Optional<ShowBrandInfoDto> optional = brandService.getDetails(uuid);
+        Optional<ShowDetailedBrandInfoDto> optional = brandService.getDetails(uuid);
         if (optional.isPresent()) {
             model.addAttribute("brandDetails", optional.get());
             return "brand-details";

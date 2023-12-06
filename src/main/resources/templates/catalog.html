@@ -1,10 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
+<html lang="en" class="h-100">
+<head th:replace="fragments/head"/>
+<body data-bs-theme="dark" class="d-flex flex-column h-100">
+<div th:replace="fragments/navbar">Navbar</div>
+<main>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
+            <form th:action="@{/catalog}" method="get" class="mt-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search models" name="searchQuery"/>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+            <table class="table mt-4">
+                <thead>
+                <tr>
+                    <th>Model Name</th>
+                    <th>Category</th>
+                    <th>Brand</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="model : ${models}">
+                    <td><a th:href="@{/model/{uuid}(uuid=${model.uuid})}" th:text="${model.name}"></a></td>
+                    <td th:text="${model.category}"></td>
+                    <td th:text="${model.brandName}"></td>
+                    <td>
+                        <form th:action="@{/addToCart}" method="post">
+                            <input type="hidden" name="modelUUID" th:value="${model.uuid}"/>
+                            <button type="submit" class="btn btn-success">Add to Cart</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<footer th:replace="fragments/footer"/>
 </body>
 </html>

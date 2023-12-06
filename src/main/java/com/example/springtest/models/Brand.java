@@ -10,6 +10,7 @@ public class Brand extends BaseEntity {
     private String name;
 
     private List<Model> models;
+
     protected Brand() {
     }
 
@@ -21,7 +22,8 @@ public class Brand extends BaseEntity {
     public String getName() {
         return this.name;
     }
-    @OneToMany(mappedBy = "brand",fetch = FetchType.LAZY,cascade = {CascadeType.REMOVE,CascadeType.MERGE,CascadeType.PERSIST})
+
+    @OneToMany(mappedBy = "brand", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST})
     public List<Model> getModels() {
         return this.models;
     }
@@ -32,5 +34,13 @@ public class Brand extends BaseEntity {
 
     public void setModels(List<Model> models) {
         this.models = models;
+    }
+
+    @Override
+    public String toString() {
+        return "Brand{" +
+                "name='" + name + '\'' +
+                ", models=" + models +
+                '}';
     }
 }

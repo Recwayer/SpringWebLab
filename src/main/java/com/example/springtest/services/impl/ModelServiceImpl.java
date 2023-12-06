@@ -115,6 +115,7 @@ public class ModelServiceImpl implements ModelService {
             Model model = modelMapper.map(dto, Model.class);
             model.setUuid(uuid);
             model.setModified(new Date());
+            model.setBrand(brandRepository.findByName(dto.getBrandName()).get());
             return modelMapper.map(modelRepository.saveAndFlush(model), UpdateModelDto.class);
         } else {
             throw new ClientException.NotFoundException("Not Found Model");
@@ -143,5 +144,10 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public Optional<UpdateModelDto> getUpdateModel(UUID uuid) {
         return Optional.ofNullable(modelMapper.map(modelRepository.findById(uuid), UpdateModelDto.class));
+    }
+
+    @Override
+    public List<ShowModelInfoDto> searchModels(String searchQuery) {
+        return modelRepository.findModelsByNameLike("%" + searchQuery + "%").stream().map(m -> modelMapper.map(m, ShowModelInfoDto.class)).toList();
     }
 }

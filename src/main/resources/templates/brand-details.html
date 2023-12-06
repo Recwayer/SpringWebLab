@@ -2,7 +2,7 @@
 <html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head"/>
 <body data-bs-theme="dark" class="d-flex flex-column h-100">
-<div th:replace="fragments/navbar">Navbar</div>
+<div th:replace="fragments/admin-navbar">Navbar</div>
 <main class="flex-shrink-0">
     <div class="container">
         <div class="row">
@@ -24,6 +24,23 @@
                                                      th:href="@{/brand/update/{uuid}(uuid=${brandDetails.uuid})}">Update
                             Brand
                         </a>
+                        </div>
+                        <div class="">
+                            <h2>Models</h2>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Model Name</th>
+                                    <th>Category</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="model : ${brandDetails.models}">
+                                    <td><a th:href="@{/model/{uuid}(uuid=${model.uuid})}" th:text="${model.name}"></a></td>
+                                    <td th:text="${model.category}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
