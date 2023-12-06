@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head"/>
-<body class="d-flex flex-column h-100">
+<body data-bs-theme="dark" class="d-flex flex-column h-100">
 <div th:replace="fragments/navbar">Navbar</div>
 <main class="flex-shrink-0">
     <div class="container">
         <div class="row">
             <div class="col-md-2"></div>
             <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
-                <h2 class="text-center text-dark mt-5">All Models</h2>
-                <div th:each="m : ${modelInfos}" class="d-flex flex-column bg-text mb-3">
-                    <h2 th:text="'Name: '+${m.name}"></h2>
-                    <h4 th:text="'Category: '+${m.category}"></h4>
-                    <h4 th:text="'Brand: '+${m.brandName}"></h4>
-                    <h4><a class="btn-block"
-                           th:href="@{/model/{uuid}(uuid=*{m.uuid})}">Detail
+                <h2 class="text-center  mt-5">All Brands</h2>
+                <div th:each="b : ${brandInfos}" class="d-flex flex-column bg-text mb-3">
+                    <h2 th:text="${b.name}"></h2>
+                    <h4><a class="btn btn-outline-danger"
+                           th:href="@{/brand/{uuid}(uuid=*{b.uuid})}">Detail
                         info</a></h4>
                 </div>
             </div>

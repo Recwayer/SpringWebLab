@@ -44,7 +44,7 @@ public class UserController {
             return "redirect:/user/add";
         }
         userService.addUser(userModel);
-        return "redirect:/";
+        return "redirect:/user/all";
     }
 
     @GetMapping("/all")

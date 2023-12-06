@@ -4,14 +4,17 @@ import com.example.springtest.utils.validation.annotations.UniqueBrandName;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
-public class AddBrandDto {
+import java.util.UUID;
+
+public class UpdateBrandDto {
+    private UUID uuid;
     @UniqueBrandName
     private String name;
 
-    public AddBrandDto() {
+    public UpdateBrandDto() {
     }
 
-    public AddBrandDto(String name) {
+    public UpdateBrandDto(String name) {
         this.name = name;
     }
 
@@ -25,4 +28,19 @@ public class AddBrandDto {
         this.name = name;
     }
 
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    @Override
+    public String toString() {
+        return "UpdateBrandDto{" +
+                "uuid=" + uuid +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

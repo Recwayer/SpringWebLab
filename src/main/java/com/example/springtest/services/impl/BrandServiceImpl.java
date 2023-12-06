@@ -3,6 +3,7 @@ package com.example.springtest.services.impl;
 import com.example.springtest.dtos.api.BrandDTO;
 import com.example.springtest.dtos.web.AddBrandDto;
 import com.example.springtest.dtos.web.ShowBrandInfoDto;
+import com.example.springtest.dtos.web.UpdateBrandDto;
 import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.Brand;
 import com.example.springtest.repositories.BrandRepository;
@@ -97,8 +98,24 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    public UpdateBrandDto update(UUID uuid, UpdateBrandDto dto) {
+        Optional<Brand> optional = brandRepository.findById(uuid);
+        if (optional.isPresent()) {
+            Brand brand = modelMapper.map(dto, Brand.class);
+            brand.setUuid(uuid);
+            brand.setModified(new Date());
+            return modelMapper.map(brandRepository.saveAndFlush(brand), UpdateBrandDto.class);
+        } else {
+            throw new ClientException.NotFoundException("Not Found Brand");
+        }
+    }
+
+    @Override
     public void addBrand(AddBrandDto dto) {
-        brandRepository.saveAndFlush(modelMapper.map(dto, Brand.class));
+        Brand brand = modelMapper.map(dto, Brand.class);
+        brand.setCreated(new Date());
+        brand.setModified(new Date());
+        brandRepository.saveAndFlush(brand);
     }
 
     @Override
@@ -110,5 +127,10 @@ public class BrandServiceImpl implements BrandService {
     public Optional<ShowBrandInfoDto> getDetails(UUID uuid) {
         return Optional.ofNullable(modelMapper.map(brandRepository.findById(uuid), ShowBrandInfoDto.class));
     }
+
+    public Optional<UpdateBrandDto> getUpdateBrand(UUID uuid) {
+        return Optional.ofNullable(modelMapper.map(brandRepository.findById(uuid), UpdateBrandDto.class));
+    }
+
 
 }

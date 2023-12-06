@@ -1,9 +1,7 @@
 package com.example.springtest.services;
 
 import com.example.springtest.dtos.api.ModelDTO;
-import com.example.springtest.dtos.web.AddModelDto;
-import com.example.springtest.dtos.web.ShowDetailedModelInfoDto;
-import com.example.springtest.dtos.web.ShowModelInfoDto;
+import com.example.springtest.dtos.web.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +17,13 @@ public interface ModelService {
     void delete(UUID uuid);
 
     ModelDTO update(ModelDTO dto);
+    UpdateModelDto update(UUID uuid, UpdateModelDto dto);
 
     void addModel(AddModelDto dto);
 
     List<ShowModelInfoDto> getAllModels();
 
     Optional<ShowDetailedModelInfoDto> getDetails(UUID uuid);
+
+    Optional<UpdateModelDto> getUpdateModel(UUID uuid);
 }

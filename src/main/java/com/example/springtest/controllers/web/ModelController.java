@@ -2,6 +2,7 @@ package com.example.springtest.controllers.web;
 
 import com.example.springtest.dtos.web.AddModelDto;
 import com.example.springtest.dtos.web.ShowDetailedModelInfoDto;
+import com.example.springtest.dtos.web.UpdateModelDto;
 import com.example.springtest.exceptions.ServerException;
 import com.example.springtest.services.BrandService;
 import com.example.springtest.services.ModelService;
@@ -47,7 +48,7 @@ public class ModelController {
             return "redirect:/model/add";
         }
         modelService.addModel(modelModel);
-        return "redirect:/";
+        return "redirect:/model/all";
     }
 
     @GetMapping("/all")
@@ -71,5 +72,23 @@ public class ModelController {
     public String deleteModel(@PathVariable("uuid") UUID uuid) {
         modelService.delete(uuid);
         return "redirect:/model/all";
+    }
+
+    @GetMapping("/update/{uuid}")
+    public String updateModel(@PathVariable("uuid") UUID uuid, Model model) {
+        model.addAttribute("modelModelUp", modelService.getUpdateModel(uuid).get());
+        model.addAttribute("availableBrands", brandService.getAllBrands());
+        return "model-update";
+    }
+
+    @PostMapping("/update/{uuid}")
+    public String updateModel(@PathVariable("uuid") UUID uuid, @Valid UpdateModelDto modelModelUp, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("modelModelUp", modelModelUp);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.modelModelUp", bindingResult);
+            return String.format("redirect:/model/update/%s", uuid);
+        }
+        modelService.update(uuid, modelModelUp);
+        return String.format("redirect:/model/%s", uuid);
     }
 }

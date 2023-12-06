@@ -7,7 +7,10 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class AddModelDto {
+import java.util.UUID;
+
+public class UpdateModelDto {
+    private UUID uuid;
     @UniqueModelName
     private String name;
     private Category category;
@@ -16,10 +19,11 @@ public class AddModelDto {
     private int endYear;
 
 
-    public AddModelDto() {
+    public UpdateModelDto() {
     }
 
-    public AddModelDto(String name, Category category, String brandName, int startYear, int endYear) {
+    public UpdateModelDto(UUID uuid, String name, Category category, String brandName, int startYear, int endYear) {
+        this.uuid = uuid;
         this.name = name;
         this.category = category;
         this.brandName = brandName;
@@ -75,6 +79,13 @@ public class AddModelDto {
         this.endYear = endYear;
     }
 
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
 
     @Override
     public String toString() {

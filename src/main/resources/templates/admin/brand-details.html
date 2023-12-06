@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head"/>
-<body class="d-flex flex-column h-100">
+<body data-bs-theme="dark" class="d-flex flex-column h-100">
 <div th:replace="fragments/navbar">Navbar</div>
 <main class="flex-shrink-0">
     <div class="container">
@@ -11,14 +11,19 @@
                 <div class="justify-content-center">
                     <h1>Brand Details</h1>
                 </div>
-                <div class="row bg-light rounded">
+                <div class="row rounded">
                     <div class="col-md-6">
                         <h2>Brand</h2>
                         <h4 th:text="'Name: ' + ${brandDetails.name}"></h4>
-                        <div class="align-bottom">
-                            <a class="btn btn-danger align-bottom"
+                        <div class="align-bottom mb-2">
+                            <a class="btn btn-danger text-light align-bottom"
                                th:href="@{/brand/delete/{uuid}(uuid=${brandDetails.uuid})}">Delete
                                 Brand</a>
+                        </div>
+                        <div class="align-bottom"><a class="btn btn-warning text-light align-bottom"
+                                                     th:href="@{/brand/update/{uuid}(uuid=${brandDetails.uuid})}">Update
+                            Brand
+                        </a>
                         </div>
                     </div>
                 </div>

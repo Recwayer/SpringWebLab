@@ -2,6 +2,7 @@ package com.example.springtest.services;
 
 
 import com.example.springtest.dtos.api.OfferDTO;
+import com.example.springtest.dtos.web.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,4 +14,9 @@ public interface OfferService {
     Optional<OfferDTO> get(UUID uuid);
     void delete(UUID uuid);
     OfferDTO update(OfferDTO dto);
+    void addOffer(AddOfferDto dto);
+
+    List<ShowOfferInfoDto> getAllOffers();
+
+    Optional<ShowDetailedOfferInfoDto> getDetails(UUID uuid);
 }

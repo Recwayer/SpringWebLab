@@ -18,21 +18,21 @@ public class AddOfferDto {
     private BigDecimal price;
     private Transmission transmission;
     private int year;
-    private Model model;
-    private User seller;
+    private String modelName;
+    private String sellerUserName;
 
     public AddOfferDto() {
     }
 
-    public AddOfferDto(String description, Engine engine, long mileage, BigDecimal price, Transmission transmission, int year, Model model, User seller) {
+    public AddOfferDto(String description, Engine engine, long mileage, BigDecimal price, Transmission transmission, int year, String modelName, String sellerUserName) {
         this.description = description;
         this.engine = engine;
         this.mileage = mileage;
         this.price = price;
         this.transmission = transmission;
         this.year = year;
-        this.model = model;
-        this.seller = seller;
+        this.modelName = modelName;
+        this.sellerUserName = sellerUserName;
     }
 
     @NotEmpty(message = "Description must not be null or empty!")
@@ -40,36 +40,43 @@ public class AddOfferDto {
     public String getDescription() {
         return description;
     }
+
     @NotNull(message = "Please choose an engine!")
     public Engine getEngine() {
         return engine;
     }
+
     @NotNull(message = "Mileage cannot be null or empty!")
     @Min(value = 1, message = "Mileage must be a positive number!")
     public long getMileage() {
         return mileage;
     }
+
     @NotNull(message = "Price cannot be null or empty!")
     @Min(value = 1, message = "Price must be a positive number!")
     public BigDecimal getPrice() {
         return price;
     }
+
     @NotNull(message = "Please choose a transmission!")
     public Transmission getTransmission() {
         return transmission;
     }
+
     @NotNull(message = "Year cannot be null or empty!")
     @Min(value = 1, message = "Year must be a positive number!")
     public int getYear() {
         return year;
     }
+
     @NotNull(message = "Please choose a model!")
-    public Model getModel() {
-        return model;
+    public String getModelName() {
+        return modelName;
     }
+
     @NotNull(message = "Please choose a seller!")
-    public User getSeller() {
-        return seller;
+    public String getSellerUserName() {
+        return sellerUserName;
     }
 
     public void setDescription(String description) {
@@ -96,11 +103,11 @@ public class AddOfferDto {
         this.year = year;
     }
 
-    public void setModel(Model model) {
-        this.model = model;
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
     }
 
-    public void setSeller(User seller) {
-        this.seller = seller;
+    public void setSellerUserName(String sellerUserName) {
+        this.sellerUserName = sellerUserName;
     }
 }

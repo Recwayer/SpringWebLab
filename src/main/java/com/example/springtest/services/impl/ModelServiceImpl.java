@@ -4,6 +4,7 @@ import com.example.springtest.dtos.api.ModelDTO;
 import com.example.springtest.dtos.web.AddModelDto;
 import com.example.springtest.dtos.web.ShowDetailedModelInfoDto;
 import com.example.springtest.dtos.web.ShowModelInfoDto;
+import com.example.springtest.dtos.web.UpdateModelDto;
 import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.Model;
 import com.example.springtest.repositories.BrandRepository;
@@ -108,8 +109,23 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
+    public UpdateModelDto update(UUID uuid, UpdateModelDto dto) {
+        Optional<Model> optional = modelRepository.findById(uuid);
+        if (optional.isPresent()) {
+            Model model = modelMapper.map(dto, Model.class);
+            model.setUuid(uuid);
+            model.setModified(new Date());
+            return modelMapper.map(modelRepository.saveAndFlush(model), UpdateModelDto.class);
+        } else {
+            throw new ClientException.NotFoundException("Not Found Model");
+        }
+    }
+
+    @Override
     public void addModel(AddModelDto dto) {
         Model model = modelMapper.map(dto, Model.class);
+        model.setCreated(new Date());
+        model.setModified(new Date());
         model.setBrand(brandRepository.findByName(dto.getBrandName()).orElse(null));
         modelRepository.saveAndFlush(model);
     }
@@ -122,5 +138,10 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public Optional<ShowDetailedModelInfoDto> getDetails(UUID uuid) {
         return Optional.ofNullable(modelMapper.map(modelRepository.findById(uuid), ShowDetailedModelInfoDto.class));
+    }
+
+    @Override
+    public Optional<UpdateModelDto> getUpdateModel(UUID uuid) {
+        return Optional.ofNullable(modelMapper.map(modelRepository.findById(uuid), UpdateModelDto.class));
     }
 }

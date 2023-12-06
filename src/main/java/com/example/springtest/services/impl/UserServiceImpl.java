@@ -1,9 +1,7 @@
 package com.example.springtest.services.impl;
 
 import com.example.springtest.dtos.api.UserDTO;
-import com.example.springtest.dtos.web.AddUserDto;
-import com.example.springtest.dtos.web.ShowDetailedUserInfoDto;
-import com.example.springtest.dtos.web.ShowUserInfoDto;
+import com.example.springtest.dtos.web.*;
 import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.User;
 import com.example.springtest.repositories.OfferRepository;
@@ -115,6 +113,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UpdateModelDto update(UUID uuid, UpdateUserDto dto) {
+        return null;
+    }
+
+    @Override
     public BigDecimal getTotalAmount(UUID uuid) {
         Optional<UserDTO> user = get(uuid);
         BigDecimal total = new BigDecimal(0);
@@ -128,6 +131,8 @@ public class UserServiceImpl implements UserService {
     public void addUser(AddUserDto dto) {
         User user = modelMapper.map(dto, User.class);
         user.setRole(userRoleRepository.findUserRoleByRole(dto.getRole()).get());
+        user.setCreated(new Date());
+        user.setModified(new Date());
         user.set_active(true);
         userRepository.saveAndFlush(user);
     }
@@ -140,5 +145,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<ShowDetailedUserInfoDto> getDetails(UUID uuid) {
         return Optional.ofNullable(modelMapper.map(userRepository.findById(uuid), ShowDetailedUserInfoDto.class));
+    }
+
+    @Override
+    public Optional<UpdateUserDto> getUpdateUser(UUID uuid) {
+        return Optional.empty();
     }
 }

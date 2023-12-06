@@ -2,6 +2,7 @@ package com.example.springtest.dtos.web;
 
 import com.example.springtest.models.enums.Category;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class ShowDetailedModelInfoDto {
@@ -12,6 +13,7 @@ public class ShowDetailedModelInfoDto {
     private int startYear;
     private int endYear;
     private String brandName;
+
 
     private String image_url;
 

@@ -1,9 +1,12 @@
 package com.example.springtest.services.impl;
 
 import com.example.springtest.dtos.api.OfferDTO;
+import com.example.springtest.dtos.web.*;
 import com.example.springtest.exceptions.ClientException;
 import com.example.springtest.models.Offer;
+import com.example.springtest.repositories.ModelRepository;
 import com.example.springtest.repositories.OfferRepository;
+import com.example.springtest.repositories.UserRepository;
 import com.example.springtest.services.OfferService;
 import com.example.springtest.utils.validation.ValidationUtil;
 import jakarta.validation.ConstraintViolation;
@@ -22,6 +25,8 @@ public class OfferServiceImpl implements OfferService {
     private final ModelMapper modelMapper;
     private final ValidationUtil validationUtil;
     private OfferRepository offerRepository;
+    private ModelRepository modelRepository;
+    private UserRepository userRepository;
 
     @Autowired
     public OfferServiceImpl(ModelMapper modelMapper, ValidationUtil validationUtil) {
@@ -32,6 +37,16 @@ public class OfferServiceImpl implements OfferService {
     @Autowired
     public void setOfferRepository(OfferRepository offerRepository) {
         this.offerRepository = offerRepository;
+    }
+
+    @Autowired
+    public void setModelRepository(ModelRepository modelRepository) {
+        this.modelRepository = modelRepository;
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -94,5 +109,25 @@ public class OfferServiceImpl implements OfferService {
                 throw new ClientException.NotFoundException("Not Found Offer");
             }
         }
+    }
+
+    @Override
+    public void addOffer(AddOfferDto dto) {
+        Offer offer = modelMapper.map(dto, Offer.class);
+        offer.setCreated(new Date());
+        offer.setModified(new Date());
+        offer.setModel(modelRepository.findByName(dto.getModelName()).orElse(null));
+        offer.setSeller(userRepository.findByUsername(dto.getSellerUserName()).orElse(null));
+        offerRepository.saveAndFlush(offer);
+    }
+
+    @Override
+    public List<ShowOfferInfoDto> getAllOffers() {
+        return offerRepository.findAll().stream().map(m -> modelMapper.map(m, ShowOfferInfoDto.class)).toList();
+    }
+
+    @Override
+    public Optional<ShowDetailedOfferInfoDto> getDetails(UUID uuid) {
+        return Optional.ofNullable(modelMapper.map(offerRepository.findById(uuid), ShowDetailedOfferInfoDto.class));
     }
 }

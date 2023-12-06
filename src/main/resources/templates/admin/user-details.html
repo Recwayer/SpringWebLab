@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head"/>
-<body class="d-flex flex-column h-100">
+<body data-bs-theme="dark" class="d-flex flex-column h-100">
 <div th:replace="fragments/navbar">Navbar</div>
 <main class="flex-shrink-0">
     <div class="container">
@@ -11,7 +11,7 @@
                 <div class="justify-content-center">
                     <h1>Model Details</h1>
                 </div>
-                <div class="row bg-light rounded">
+                <div class="row rounded">
                     <div class="col-md-6">
                         <h2>Model</h2>
                         <h4 th:text="'Username: ' + ${userDetails.username}"></h4>
@@ -19,10 +19,15 @@
                         <h4 th:text="'Role: ' + ${userDetails.role}"></h4>
                         <h4 th:text="'Active: ' + ${userDetails.is_active}"></h4>
                         <div class="align-bottom">
-                            <a class="btn btn-danger align-bottom"
+                            <a class="btn btn-danger text-light align-bottom"
                                th:href="@{/user/delete/{uuid}(uuid=${userDetails
                                .uuid})}">Delete
                                 User</a>
+                        </div>
+                        <div class="align-bottom"><a class="btn text-light btn-warning align-bottom"
+                                                     th:href="@{/user/update/{uuid}(uuid=${userDetails.uuid})}">Update
+                            User
+                        </a>
                         </div>
                     </div>
                     <div class="col-md-6"><img th:src="${userDetails.image_url}" height="350px"></div>

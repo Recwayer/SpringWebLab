@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head"/>
+<body data-bs-theme="dark" class="d-flex flex-column h-100">
+<div th:replace="fragments/navbar">Navbar</div>
+<main class="flex-shrink-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <main class="jumbotron text-center rounded col-md-12 align-self-center pt-5">
+                <div class="justify-content-center">
+                    <h1>Offer Details</h1>
+                </div>
+                <div class="row rounded">
+                    <div class="col-md-6">
+                        <h2>Offer</h2>
+                        <h4 th:text="'Description: ' + ${offerDetails.description}"></h4>
+                        <h4 th:text="'Engine: ' + ${offerDetails.engine}"></h4>
+                        <h4 th:text="'Mileage: ' + ${offerDetails.mileage}"></h4>
+                        <h4 th:text="'Price: ' + ${offerDetails.price}"></h4>
+                        <h4 th:text="'Transmission: ' + ${offerDetails.transmission}"></h4>
+                        <h4 th:text="'Year: ' + ${offerDetails.year}"></h4>
+                        <h4 th:text="'Seller: ' + ${offerDetails.sellerUsername}"></h4>
+                        <h4 th:text="'Model: ' + ${offerDetails.modelName}"></h4>
+
+                        <div class="align-bottom">
+                            <a class="btn btn-danger text-light align-bottom"
+                               th:href="@{/offer/delete/{uuid}(uuid=${offerDetails
+                               .uuid})}">Delete
+                                Offer</a>
+                        </div>
+                        <div class="align-bottom"><a class="btn btn-warning text-light align-bottom"
+                                                     th:href="@{/offer/update/{uuid}(uuid=${offerDetails.uuid})}">Update
+                            Offer
+                        </a>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</main>
+<footer th:replace="fragments/footer"/>
+</body>
+</html>

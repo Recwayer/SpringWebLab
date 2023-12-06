@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head"/>
-<body class="d-flex flex-column h-100">
+<body data-bs-theme="dark" class="d-flex flex-column h-100">
 <div th:replace="fragments/navbar">Navbar</div>
 <main class="flex-shrink-0">
     <div class="container">
@@ -9,11 +9,11 @@
             <div class="col-md-2"></div>
             <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
                 <div class="justify-content-center">
-                    <h1>Add Model</h1>
+                    <h1>Update Model</h1>
                 </div>
-                <form th:action="@{/model/add}"
+                <form th:action="@{/model/update/{uuid}(uuid=${modelModelUp.uuid})}"
                       th:method="post"
-                      th:object="${modelModel}"
+                      th:object="${modelModelUp}"
                       class="m-md-auto w-50 pb-3">
                     <div class="mb-3">
                         <label class="form-label" for="name">Name</label>
@@ -97,7 +97,7 @@
                         <small th:if="${#fields.hasErrors('endYear')}" th:errors="*{endYear}" class="text-danger">Error
                             message</small>
                     </div>
-                    <button type="submit" class="btn btn-secondary">Add Model</button>
+                    <button type="submit" class="btn btn-secondary">Update Model</button>
                 </form>
             </div>
         </div>

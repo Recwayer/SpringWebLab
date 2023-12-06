@@ -2,6 +2,7 @@ package com.example.springtest.controllers.web;
 
 import com.example.springtest.dtos.web.AddBrandDto;
 import com.example.springtest.dtos.web.ShowBrandInfoDto;
+import com.example.springtest.dtos.web.UpdateBrandDto;
 import com.example.springtest.exceptions.ServerException;
 import com.example.springtest.services.BrandService;
 import jakarta.validation.Valid;
@@ -43,7 +44,7 @@ public class BrandController {
             return "redirect:/brand/add";
         }
         brandService.addBrand(brandModel);
-        return "redirect:/";
+        return "redirect:/brand/all";
     }
 
     @GetMapping("/all")
@@ -67,5 +68,22 @@ public class BrandController {
     public String deleteBrand(@PathVariable("uuid") UUID uuid) {
         brandService.delete(uuid);
         return "redirect:/brand/all";
+    }
+
+    @GetMapping("/update/{uuid}")
+    public String updateBrand(@PathVariable("uuid") UUID uuid, Model model) {
+        model.addAttribute("brandModelUp", brandService.getUpdateBrand(uuid).get());
+        return "brand-update";
+    }
+
+    @PostMapping("/update/{uuid}")
+    public String updateBrand(@PathVariable("uuid") UUID uuid, @Valid UpdateBrandDto brandModelUp, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("brandModelUp", brandModelUp);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.brandModelUp", bindingResult);
+            return String.format("redirect:/brand/update/%s", uuid);
+        }
+        brandService.update(uuid, brandModelUp);
+        return String.format("redirect:/brand/%s", uuid);
     }
 }
