@@ -2,9 +2,10 @@ package com.example.springtest.dtos.web;
 
 import com.example.springtest.models.enums.Category;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class ShowModelInfoDto {
+public class ShowModelInfoDto implements Serializable {
     private UUID uuid;
     private String name;
     private Category category;

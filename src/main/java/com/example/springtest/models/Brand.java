@@ -18,7 +18,7 @@ public class Brand extends BaseEntity {
         this.name = name;
         this.models = models;
     }
-
+    @Column(columnDefinition = "TEXT", nullable = false, unique = true)
     public String getName() {
         return this.name;
     }

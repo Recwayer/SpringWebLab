@@ -9,11 +9,11 @@
             <div class="col-md-2"></div>
             <main class="jumbotron text-center rounded col-md-12 align-self-center pt-5">
                 <div class="justify-content-center">
-                    <h1>Model Details</h1>
+                    <h1>User Details</h1>
                 </div>
                 <div class="row rounded">
                     <div class="col-md-6">
-                        <h2>Model</h2>
+                        <h2>User</h2>
                         <h4 th:text="'Username: ' + ${userDetails.username}"></h4>
                         <h4 th:text="'Full Name: ' + ${userDetails.firstName +' '+ userDetails.lastName}"></h4>
                         <h4 th:text="'Role: ' + ${userDetails.role}"></h4>
@@ -30,7 +30,7 @@
                         </a>
                         </div>
                     </div>
-                    <div class="col-md-6"><img th:src="${userDetails.image_url}" height="350px"></div>
+                    <div class="col-md-6"><img src="/img/icon.png" height="350px"></div>
                 </div>
             </main>
         </div>

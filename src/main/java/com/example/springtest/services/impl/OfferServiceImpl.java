@@ -15,6 +15,9 @@ import com.example.springtest.utils.validation.ValidationUtil;
 import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -24,6 +27,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@EnableCaching
 public class OfferServiceImpl implements OfferService {
     private final ModelMapper modelMapper;
     private final ValidationUtil validationUtil;
@@ -53,6 +57,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    @CacheEvict(value = "offers", allEntries = true)
     public OfferDTO register(OfferDTO dto) {
         if (!this.validationUtil.isValid(dto)) {
             this.validationUtil
@@ -86,6 +91,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    @CacheEvict(value = "offers", allEntries = true)
     public void delete(UUID uuid) {
         if (offerRepository.findById(uuid).isPresent()) {
             offerRepository.deleteById(uuid);
@@ -93,6 +99,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    @CacheEvict(value = "offers", allEntries = true)
     public OfferDTO update(OfferDTO dto) {
         if (!this.validationUtil.isValid(dto)) {
             this.validationUtil
@@ -115,6 +122,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    @CacheEvict(value = "offers", allEntries = true)
     public UpdateOfferDto update(UUID uuid, UpdateOfferDto dto) {
         Optional<Offer> optional = offerRepository.findById(uuid);
         if (optional.isPresent()) {
@@ -130,6 +138,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    @CacheEvict(value = "offers", allEntries = true)
     public void addOffer(AddOfferDto dto) {
         Offer offer = modelMapper.map(dto, Offer.class);
         offer.setCreated(new Date());
@@ -140,8 +149,9 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    @Cacheable("offers")
     public List<ShowOfferInfoDto> getAllOffers() {
-        return offerRepository.findAll().stream().map(m -> modelMapper.map(m, ShowOfferInfoDto.class)).toList();
+        return offerRepository.findAll().stream().map(m -> modelMapper.map(m, ShowOfferInfoDto.class)).collect(Collectors.toList());
     }
 
     @Override

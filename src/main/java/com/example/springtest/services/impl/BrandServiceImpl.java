@@ -13,12 +13,19 @@ import com.example.springtest.utils.validation.ValidationUtil;
 import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@EnableCaching
 public class BrandServiceImpl implements BrandService {
     private final ModelMapper modelMapper;
     private final ValidationUtil validationUtil;
@@ -37,6 +44,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @CacheEvict(value = "brands", allEntries = true)
     public BrandDTO register(BrandDTO dto) {
         if (!this.validationUtil.isValid(dto)) {
             this.validationUtil
@@ -70,6 +78,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @CacheEvict(value = "brands", allEntries = true)
     public void delete(UUID id) {
         if (brandRepository.findById(id).isPresent()) {
             brandRepository.deleteById(id);
@@ -77,6 +86,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @CacheEvict(value = "brands", allEntries = true)
     public BrandDTO update(BrandDTO dto) {
         if (!this.validationUtil.isValid(dto)) {
             this.validationUtil
@@ -99,6 +109,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @CacheEvict(value = "brands", allEntries = true)
     public UpdateBrandDto update(UUID uuid, UpdateBrandDto dto) {
         Optional<Brand> optional = brandRepository.findById(uuid);
         if (optional.isPresent()) {
@@ -112,6 +123,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @CacheEvict(value = "brands", allEntries = true)
     public void addBrand(AddBrandDto dto) {
         Brand brand = modelMapper.map(dto, Brand.class);
         brand.setCreated(new Date());
@@ -120,8 +132,9 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @Cacheable("brands")
     public List<ShowBrandInfoDto> getAllBrands() {
-        return brandRepository.findAll().stream().map(b -> modelMapper.map(b, ShowBrandInfoDto.class)).toList();
+        return brandRepository.findAll().stream().map(b -> modelMapper.map(b, ShowBrandInfoDto.class)).collect(Collectors.toList());
     }
 
     @Override

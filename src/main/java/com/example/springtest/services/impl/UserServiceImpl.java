@@ -15,6 +15,9 @@ import com.example.springtest.utils.validation.ValidationUtil;
 import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,6 +28,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@EnableCaching
 public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final ValidationUtil validationUtil;
@@ -54,15 +58,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true)
     public UserDTO register(UserDTO dto) {
         if (!this.validationUtil.isValid(dto)) {
-            this.validationUtil
-                    .violations(dto)
-                    .stream()
-                    .map(ConstraintViolation::getMessage).forEach(s -> {
-                        System.out.println(s);
-                        throw new ClientException.InvalidInputException(s);
-                    });
+            this.validationUtil.violations(dto).stream().map(ConstraintViolation::getMessage).forEach(s -> {
+                System.out.println(s);
+                throw new ClientException.InvalidInputException(s);
+            });
             return null;
         } else {
             User user = modelMapper.map(dto, User.class);
@@ -87,6 +89,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true)
     public void delete(UUID uuid) {
         if (userRepository.findById(uuid).isPresent()) {
             userRepository.deleteById(uuid);
@@ -94,15 +97,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true)
     public UserDTO update(UserDTO dto) {
         if (!this.validationUtil.isValid(dto)) {
-            this.validationUtil
-                    .violations(dto)
-                    .stream()
-                    .map(ConstraintViolation::getMessage).forEach(s -> {
-                        System.out.println(s);
-                        throw new ClientException.InvalidInputException(s);
-                    });
+            this.validationUtil.violations(dto).stream().map(ConstraintViolation::getMessage).forEach(s -> {
+                System.out.println(s);
+                throw new ClientException.InvalidInputException(s);
+            });
             return null;
         } else {
             if (userRepository.findById(dto.getUuid()).isPresent()) {
@@ -116,6 +117,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true)
     public UpdateUserDto update(UUID uuid, UpdateUserDto dto) {
         Optional<User> optional = userRepository.findById(uuid);
         if (optional.isPresent()) {
@@ -141,6 +143,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true)
     public void addUser(AddUserDto dto) {
         User user = modelMapper.map(dto, User.class);
         user.setRole(userRoleRepository.findUserRoleByRole(dto.getRole()).orElse(null));
@@ -151,8 +154,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable("users")
     public List<ShowUserInfoDto> getAllUsers() {
-        return userRepository.findAll().stream().map(u -> modelMapper.map(u, ShowUserInfoDto.class)).toList();
+        return userRepository.findAll().stream().map(u -> modelMapper.map(u, ShowUserInfoDto.class)).collect(Collectors.toList());
     }
 
     @Override

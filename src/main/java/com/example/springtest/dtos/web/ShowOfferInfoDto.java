@@ -1,9 +1,10 @@
 package com.example.springtest.dtos.web;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class ShowOfferInfoDto {
+public class ShowOfferInfoDto implements Serializable {
     private UUID uuid;
     private BigDecimal price;
     private String sellerUsername;

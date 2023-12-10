@@ -2,9 +2,10 @@ package com.example.springtest.dtos.web;
 
 import com.example.springtest.models.enums.Role;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class ShowUserInfoDto {
+public class ShowUserInfoDto implements Serializable {
     private UUID uuid;
     private String username;
     private Role role;

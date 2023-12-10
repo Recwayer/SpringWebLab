@@ -14,6 +14,9 @@ import com.example.springtest.utils.validation.ValidationUtil;
 import jakarta.validation.ConstraintViolation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -23,6 +26,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@EnableCaching
 public class ModelServiceImpl implements ModelService {
     private final ModelMapper modelMapper;
     private final ValidationUtil validationUtil;
@@ -47,6 +51,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
+
     public ModelDTO register(ModelDTO dto) {
         if (!this.validationUtil.isValid(dto)) {
             this.validationUtil
@@ -80,6 +85,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
+    @CacheEvict(value = "models", allEntries = true)
     public void delete(UUID uuid) {
         if (modelRepository.findById(uuid).isPresent()) {
             modelRepository.deleteById(uuid);
@@ -87,6 +93,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
+    @CacheEvict(value = "models", allEntries = true)
     public ModelDTO update(ModelDTO dto) {
         if (!this.validationUtil.isValid(dto)) {
             this.validationUtil
@@ -109,6 +116,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
+    @CacheEvict(value = "models", allEntries = true)
     public UpdateModelDto update(UUID uuid, UpdateModelDto dto) {
         Optional<Model> optional = modelRepository.findById(uuid);
         if (optional.isPresent()) {
@@ -123,6 +131,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
+    @CacheEvict(value = "models", allEntries = true)
     public void addModel(AddModelDto dto) {
         Model model = modelMapper.map(dto, Model.class);
         model.setCreated(new Date());
@@ -132,8 +141,9 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
+    @Cacheable("models")
     public List<ShowModelInfoDto> getAllModels() {
-        return modelRepository.findAll().stream().map(m -> modelMapper.map(m, ShowModelInfoDto.class)).toList();
+        return modelRepository.findAll().stream().map(m -> modelMapper.map(m, ShowModelInfoDto.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -147,7 +157,8 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
+    @Cacheable(value = "models", key = "#searchQuery")
     public List<ShowModelInfoDto> searchModels(String searchQuery) {
-        return modelRepository.findModelsByNameLike("%" + searchQuery + "%").stream().map(m -> modelMapper.map(m, ShowModelInfoDto.class)).toList();
+        return modelRepository.findModelsByNameLike("%" + searchQuery + "%").stream().map(m -> modelMapper.map(m, ShowModelInfoDto.class)).collect(Collectors.toList());
     }
 }
