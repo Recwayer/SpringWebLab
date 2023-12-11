@@ -17,12 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,7 +83,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    @CacheEvict(value = "models", allEntries = true)
+    @CacheEvict(value = {"models", "popularModels","offers"}, allEntries = true)
     public void delete(UUID uuid) {
         if (modelRepository.findById(uuid).isPresent()) {
             modelRepository.deleteById(uuid);
@@ -131,7 +129,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    @CacheEvict(value = "models", allEntries = true)
+    @CacheEvict(value = {"models", "popularModels"}, allEntries = true)
     public void addModel(AddModelDto dto) {
         Model model = modelMapper.map(dto, Model.class);
         model.setCreated(new Date());
@@ -144,6 +142,12 @@ public class ModelServiceImpl implements ModelService {
     @Cacheable("models")
     public List<ShowModelInfoDto> getAllModels() {
         return modelRepository.findAll().stream().map(m -> modelMapper.map(m, ShowModelInfoDto.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    @Cacheable(value = "models",key = "#sort")
+    public List<ShowModelInfoDto> getAllModels(Sort sort) {
+        return modelRepository.findAll(sort).stream().map(m -> modelMapper.map(m, ShowModelInfoDto.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -160,5 +164,25 @@ public class ModelServiceImpl implements ModelService {
     @Cacheable(value = "models", key = "#searchQuery")
     public List<ShowModelInfoDto> searchModels(String searchQuery) {
         return modelRepository.findModelsByNameLike("%" + searchQuery + "%").stream().map(m -> modelMapper.map(m, ShowModelInfoDto.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    @Cacheable(value = "models", key = "#searchQuery+'_'+#sort")
+    public List<ShowModelInfoDto> searchModels(String searchQuery, Sort sort) {
+        return modelRepository.findModelsByNameLike("%" + searchQuery + "%", sort).stream().map(m -> modelMapper.map(m, ShowModelInfoDto.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    @Cacheable(value = "popularModels")
+    public List<ShowModelInfoDto> popularModels() {
+        List<UUID> popularModelIds = modelRepository.findPopularModelsByOfferCount().stream().limit(3)
+                .map(array -> (UUID) array[0])
+                .toList();
+
+        return modelRepository.findAllById(popularModelIds)
+                .stream()
+                .map(model -> modelMapper.map(model, ShowModelInfoDto.class))
+                .collect(Collectors.toList());
+
     }
 }

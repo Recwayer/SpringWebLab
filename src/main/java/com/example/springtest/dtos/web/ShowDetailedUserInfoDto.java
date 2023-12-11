@@ -2,6 +2,7 @@ package com.example.springtest.dtos.web;
 
 import com.example.springtest.models.enums.Role;
 
+import java.util.List;
 import java.util.UUID;
 
 public class ShowDetailedUserInfoDto {
@@ -12,18 +13,7 @@ public class ShowDetailedUserInfoDto {
     private boolean is_active;
     private Role role;
     private String image_url;
-
-    public ShowDetailedUserInfoDto() {
-    }
-
-    public ShowDetailedUserInfoDto(UUID uuid, String username, String firstName, String lastName, boolean is_active, Role role) {
-        this.uuid = uuid;
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.is_active = is_active;
-        this.role = role;
-    }
+    private List<ShowOfferInfoDto> offers;
 
     public UUID getUuid() {
         return uuid;
@@ -79,5 +69,13 @@ public class ShowDetailedUserInfoDto {
 
     public void setImage_url(String image_url) {
         this.image_url = image_url;
+    }
+
+    public List<ShowOfferInfoDto> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<ShowOfferInfoDto> offers) {
+        this.offers = offers;
     }
 }

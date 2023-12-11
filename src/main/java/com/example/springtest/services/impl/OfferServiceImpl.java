@@ -57,7 +57,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    @CacheEvict(value = "offers", allEntries = true)
+    @CacheEvict(value = {"offers","popularModels"}, allEntries = true)
     public OfferDTO register(OfferDTO dto) {
         if (!this.validationUtil.isValid(dto)) {
             this.validationUtil
@@ -91,7 +91,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    @CacheEvict(value = "offers", allEntries = true)
+    @CacheEvict(value = {"offers","popularModels"}, allEntries = true)
     public void delete(UUID uuid) {
         if (offerRepository.findById(uuid).isPresent()) {
             offerRepository.deleteById(uuid);
@@ -138,7 +138,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    @CacheEvict(value = "offers", allEntries = true)
+    @CacheEvict(value = {"offers","popularModels"}, allEntries = true)
     public void addOffer(AddOfferDto dto) {
         Offer offer = modelMapper.map(dto, Offer.class);
         offer.setCreated(new Date());

@@ -25,7 +25,7 @@
                             Brand
                         </a>
                         </div>
-                        <div class="">
+                        <div th:if="${brandDetails.models!=null and not #lists.isEmpty(brandDetails.models)}" class="">
                             <h2>Models</h2>
                             <table class="table">
                                 <thead>
@@ -41,6 +41,9 @@
                                 </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div th:unless="${brandDetails.models != null and not #lists.isEmpty(brandDetails.models)}">
+                            <p>No models available</p>
                         </div>
                     </div>
                 </div>

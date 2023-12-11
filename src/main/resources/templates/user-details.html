@@ -29,6 +29,29 @@
                             User
                         </a>
                         </div>
+                        <div th:if="${userDetails.offers!=null and not #lists.isEmpty(userDetails.offers)}" class="">
+                            <h2>Offers</h2>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Offer</th>
+                                    <th>Price</th>
+                                    <th>SellerName</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="offer : ${userDetails.offers}">
+                                    <td><a th:href="@{/offer/{uuid}(uuid=${offer.uuid})}" th:text="${offer.uuid}"></a>
+                                    </td>
+                                    <td th:text="${offer.price}"></td>
+                                    <td th:text="${offer.sellerUsername}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div th:unless="${userDetails.offers != null and not #lists.isEmpty(userDetails.offers)}">
+                            <p>No offers available</p>
+                        </div>
                     </div>
                     <div class="col-md-6"><img src="/img/icon.png" height="350px"></div>
                 </div>

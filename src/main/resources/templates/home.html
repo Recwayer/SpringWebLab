@@ -9,8 +9,39 @@
         <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
             <div class="justify-content-center">
                 <h1>Welcome to AutoSell.</h1>
+                <h2>Popular Models</h2>
+                <div th:if="${popularModels!=null and not #lists.isEmpty(popularModels)}">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Brand</th>
+                            <th>Details</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="pm : ${popularModels}">
+                            <td th:text="${pm.name}"></td>
+                            <td th:text="${pm.category}"></td>
+                            <td th:text="${pm.brandName}"></td>
+                            <td>
+                                <a class="btn btn-outline-danger"
+                                   th:href="@{/model/{uuid}(uuid=*{pm.uuid})}">Detail info
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:unless="${popularModels != null and not #lists.isEmpty(popularModels)}" class="mt-3 mb-3">
+                    <p>No models available</p>
+                </div>
+
+                </div>
             </div>
         </div>
+
     </div>
 </main>
 <footer th:replace="fragments/footer"/>

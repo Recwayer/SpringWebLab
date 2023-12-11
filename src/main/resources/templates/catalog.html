@@ -9,33 +9,50 @@
         <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
             <form th:action="@{/catalog}" method="get" class="mt-4">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search models" name="searchQuery"/>
+                    <input th:value="${searchQuery}" type="text" class="form-control" placeholder="Search models"
+                           name="searchQuery"/>
                     <button type="submit" class="btn btn-primary">Search</button>
                 </div>
+                <div class="mt-2">
+                    <label>
+                        <select class="form-control" name="sortField">
+                            <option value="name" name="name" th:selected="${sortField == 'name'}">Model Name</option>
+                            <option value="category" name="category" th:selected="${sortField == 'category'}">Category
+                            </option>
+                            <option value="brandName" name="brandName" th:selected="${sortField == 'brandName'}">Brand
+                            </option>
+                        </select>
+                    </label>
+
+                    <label>
+                        <select class="form-control" name="sortOrder">
+                            <option value="asc" name="asc" th:selected="${sortOrder == 'asc'}">Ascending</option>
+                            <option value="desc" name="desc" th:selected="${sortOrder == 'desc'}">Descending</option>
+                        </select>
+                    </label>
+                </div>
             </form>
-            <table class="table mt-4">
-                <thead>
-                <tr>
-                    <th>Model Name</th>
-                    <th>Category</th>
-                    <th>Brand</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="model : ${models}">
-                    <td><a th:href="@{/model/{uuid}(uuid=${model.uuid})}" th:text="${model.name}"></a></td>
-                    <td th:text="${model.category}"></td>
-                    <td th:text="${model.brandName}"></td>
-                    <td>
-                        <form th:action="@{/addToCart}" method="post">
-                            <input type="hidden" name="modelUUID" th:value="${model.uuid}"/>
-                            <button type="submit" class="btn btn-success">Add to Cart</button>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div th:if="${models!=null and not #lists.isEmpty(models)}">
+                <table class="table mt-4">
+                    <thead>
+                    <tr>
+                        <th>Model Name</th>
+                        <th>Category</th>
+                        <th>Brand</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="model : ${models}">
+                        <td><a th:href="@{/model/{uuid}(uuid=${model.uuid})}" th:text="${model.name}"></a></td>
+                        <td th:text="${model.category}"></td>
+                        <td th:text="${model.brandName}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:unless="${models != null and not #lists.isEmpty(models)}" class="mt-3 mb-3">
+                <p>no models found</p>
+            </div>
         </div>
     </div>
 </main>

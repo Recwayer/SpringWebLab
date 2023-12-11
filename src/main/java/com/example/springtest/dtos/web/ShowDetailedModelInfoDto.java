@@ -3,6 +3,7 @@ package com.example.springtest.dtos.web;
 import com.example.springtest.models.enums.Category;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class ShowDetailedModelInfoDto {
@@ -14,7 +15,7 @@ public class ShowDetailedModelInfoDto {
     private int endYear;
     private String brandName;
 
-
+    private List<ShowOfferInfoDto> offers;
     private String image_url;
 
     public String getName() {
@@ -71,5 +72,13 @@ public class ShowDetailedModelInfoDto {
 
     public void setImage_url(String image_url) {
         this.image_url = image_url;
+    }
+
+    public List<ShowOfferInfoDto> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<ShowOfferInfoDto> offers) {
+        this.offers = offers;
     }
 }

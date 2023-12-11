@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(value = "users", allEntries = true)
+    @CacheEvict(value = {"users", "offers", "popularModels"}, allEntries = true)
     public void delete(UUID uuid) {
         if (userRepository.findById(uuid).isPresent()) {
             userRepository.deleteById(uuid);

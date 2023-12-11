@@ -78,7 +78,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    @CacheEvict(value = "brands", allEntries = true)
+    @CacheEvict(value = {"brands", "models", "popularModels", "offers"}, allEntries = true)
     public void delete(UUID id) {
         if (brandRepository.findById(id).isPresent()) {
             brandRepository.deleteById(id);

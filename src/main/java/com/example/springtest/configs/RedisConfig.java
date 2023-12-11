@@ -9,7 +9,6 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
 
@@ -34,6 +33,7 @@ public class RedisConfig {
 
         return RedisCacheManager.builder(redisConnectionFactory())
                 .cacheDefaults(cacheConfig)
+                .withCacheConfiguration("popularModels", myDefaultCacheConfig(Duration.ofMinutes(15)))
                 .withCacheConfiguration("brands", myDefaultCacheConfig(Duration.ofMinutes(10)))
                 .withCacheConfiguration("models", myDefaultCacheConfig(Duration.ofMinutes(10)))
                 .withCacheConfiguration("users", myDefaultCacheConfig(Duration.ofMinutes(5)))

@@ -14,23 +14,8 @@ public class ShowDetailedOfferInfoDto {
     private BigDecimal price;
     private Transmission transmission;
     private int year;
-    private String modelName;
+    private ShowModelInfoDto model;
     private String sellerUsername;
-
-    public ShowDetailedOfferInfoDto() {
-    }
-
-    public ShowDetailedOfferInfoDto(UUID uuid, String description, Engine engine, long mileage, BigDecimal price, Transmission transmission, int year, String modelName, String sellerUsername) {
-        this.uuid = uuid;
-        this.description = description;
-        this.engine = engine;
-        this.mileage = mileage;
-        this.price = price;
-        this.transmission = transmission;
-        this.year = year;
-        this.modelName = modelName;
-        this.sellerUsername = sellerUsername;
-    }
 
     public UUID getUuid() {
         return uuid;
@@ -88,12 +73,12 @@ public class ShowDetailedOfferInfoDto {
         this.year = year;
     }
 
-    public String getModelName() {
-        return modelName;
+    public ShowModelInfoDto getModel() {
+        return model;
     }
 
-    public void setModelName(String modelName) {
-        this.modelName = modelName;
+    public void setModel(ShowModelInfoDto model) {
+        this.model = model;
     }
 
     public String getSellerUsername() {
