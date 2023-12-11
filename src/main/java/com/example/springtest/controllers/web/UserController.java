@@ -3,8 +3,10 @@ package com.example.springtest.controllers.web;
 import com.example.springtest.dtos.web.AddUserDto;
 import com.example.springtest.dtos.web.ShowDetailedUserInfoDto;
 import com.example.springtest.dtos.web.UpdateUserDto;
+import com.example.springtest.exceptions.ClientSecurityException;
 import com.example.springtest.exceptions.ServerException;
 import com.example.springtest.services.UserService;
+import com.example.springtest.services.sec.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,12 +22,18 @@ import java.util.UUID;
 @RequestMapping("/user")
 public class UserController {
     private UserService userService;
+    private AuthService authService;
+
 
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
+    @Autowired
+    public void setAuthService(AuthService authService) {
+        this.authService = authService;
+    }
 
     @GetMapping("/add")
     public String addUser() {
@@ -44,13 +52,19 @@ public class UserController {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userModel", bindingResult);
             return "redirect:/user/add";
         }
-        userService.addUser(userModel);
+        try {
+            authService.register(userModel);
+        } catch (ClientSecurityException e) {
+            redirectAttributes.addFlashAttribute("userModel", userModel);
+            redirectAttributes.addFlashAttribute("badConfirm", true);
+            return "redirect:/user/add";
+        }
         return "redirect:/user/all";
     }
 
     @GetMapping("/all")
     public String showAllUsers(Model model) {
-        model.addAttribute("userInfos",userService.getAllUsers());
+        model.addAttribute("userInfos", userService.getAllUsers());
         return "user-all";
     }
 
@@ -70,6 +84,7 @@ public class UserController {
         userService.delete(uuid);
         return "redirect:/user/all";
     }
+
     @GetMapping("/update/{uuid}")
     public String updateModel(@PathVariable("uuid") UUID uuid, Model model) {
         model.addAttribute("userModelUp", userService.getUpdateUser(uuid).get());
@@ -84,6 +99,12 @@ public class UserController {
             return String.format("redirect:/user/update/%s", uuid);
         }
         userService.update(uuid, userModelUp);
+        return String.format("redirect:/user/%s", uuid);
+    }
+
+    @PostMapping("/changeActive/{uuid}")
+    public String ban(@PathVariable("uuid") UUID uuid) {
+        userService.changeActive(uuid);
         return String.format("redirect:/user/%s", uuid);
     }
 }

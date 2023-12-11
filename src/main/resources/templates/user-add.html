@@ -20,7 +20,7 @@
                         <input th:field="*{username}"
                                th:errorclass="is-invalid"
                                type="text" class="form-control text-center" id="name" aria-describedby="nameHelp"
-                               name="name" required minlength="3"/>
+                               name="name" required minlength="5"/>
                         <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger">Error
                             message</small>
                     </div>
@@ -30,8 +30,19 @@
                                th:errorclass="is-invalid"
                                type="text" class="form-control text-center" id="password"
                                aria-describedby="passwordHelp"
-                               name="password" required minlength="3"/>
+                               name="password" required minlength="5"/>
                         <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger">Error
+                            message</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="confirmPassword">Confirm password</label>
+                        <input th:field="*{confirmPassword}"
+                               required minlength="5" maxlength="20"
+                               th:errorclass="is-invalid"
+                               type="text" min="0" class="form-control text-center"
+                               id="confirmPassword" aria-describedby="confirmPassword" name="confirmPassword"/>
+                        <small th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"
+                               class="text-danger">Error
                             message</small>
                     </div>
                     <div class="mb-3">
@@ -77,6 +88,9 @@
                     </fieldset>
                     <button type="submit" class="btn btn-secondary">Add User</button>
                 </form>
+                <p class="text-danger" th:if="${badConfirm}">
+                    Password mismatch.
+                </p>
             </div>
         </div>
     </div>

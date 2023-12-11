@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Constraint(validatedBy = UniqueUserNameValidator.class)
 public @interface UniqueUserName {
-    String message() default "Brand already exists!";
+    String message() default "UserName already exists!";
 
     Class<?>[] groups() default {};
 

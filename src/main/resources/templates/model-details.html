@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/head"/>
 <body data-bs-theme="dark" class="d-flex flex-column h-100">
 <div th:replace="fragments/admin-navbar">Navbar</div>
@@ -19,18 +19,18 @@
                         <h4 th:text="'StartYear: ' + ${modelDetails.startYear}"></h4>
                         <h4 th:text="'EndYear: ' + ${modelDetails.endYear}"></h4>
                         <h4 th:text="'Brand: ' + ${modelDetails.brandName}"></h4>
-                        <div class="align-bottom">
+                        <div sec:authorize="hasRole('ADMIN')" class="align-bottom">
                             <a class="btn btn-danger text-light align-bottom"
                                th:href="@{/model/delete/{uuid}(uuid=${modelDetails.uuid})}">Delete
                                 Model</a>
                         </div>
-                        <div class="align-bottom"><a class="btn btn-warning text-light align-bottom"
+                        <div sec:authorize="hasRole('ADMIN')" class="align-bottom"><a class="btn btn-warning text-light align-bottom"
                                                      th:href="@{/model/update/{uuid}(uuid=${modelDetails.uuid})}">Update
                             Model
                         </a>
                         </div>
+                        <h2>Offers</h2>
                         <div th:if="${modelDetails.offers!=null and not #lists.isEmpty(modelDetails.offers)}" class="">
-                            <h2>Offers</h2>
                             <table class="table">
                                 <thead>
                                 <tr>

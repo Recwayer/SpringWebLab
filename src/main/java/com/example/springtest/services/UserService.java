@@ -31,4 +31,6 @@ public interface UserService {
     Optional<ShowDetailedUserInfoDto> getDetails(UUID uuid);
 
     Optional<UpdateUserDto> getUpdateUser(UUID uuid);
+
+    void changeActive(UUID uuid);
 }

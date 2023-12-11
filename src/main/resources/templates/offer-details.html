@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/head"/>
 <body data-bs-theme="dark" class="d-flex flex-column h-100">
 <div th:replace="fragments/admin-navbar">Navbar</div>
@@ -26,13 +26,13 @@
                             <a th:href="@{/model/{uuid}(uuid=${offerDetails.model.uuid})}" th:text="${offerDetails.model.name}"></a>
                         </h4>
 
-                        <div class="align-bottom">
+                        <div sec:authorize="hasRole('ADMIN')" class="align-bottom">
                             <a class="btn btn-danger text-light align-bottom"
                                th:href="@{/offer/delete/{uuid}(uuid=${offerDetails
                                .uuid})}">Delete
                                 Offer</a>
                         </div>
-                        <div class="align-bottom"><a class="btn btn-warning text-light align-bottom"
+                        <div sec:authorize="hasRole('ADMIN')" class="align-bottom"><a class="btn btn-warning text-light align-bottom"
                                                      th:href="@{/offer/update/{uuid}(uuid=${offerDetails.uuid})}">Update
                             Offer
                         </a>

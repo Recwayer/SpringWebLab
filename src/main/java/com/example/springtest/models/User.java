@@ -32,6 +32,14 @@ public class User extends BaseEntity {
         this.offers = offers;
     }
 
+    public User(String username, String password, String firstName, String lastName, boolean is_active) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.is_active = is_active;
+    }
+
     public String getUsername() {
         return this.username;
     }
@@ -51,7 +59,7 @@ public class User extends BaseEntity {
     public boolean is_active() {
         return this.is_active;
     }
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     public UserRole getRole() {
         return this.role;
     }

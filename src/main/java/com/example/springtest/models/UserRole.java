@@ -27,6 +27,11 @@ public class UserRole {
         this.role = role;
         this.users = users;
     }
+
+    public UserRole(Role role) {
+        this.role = role;
+    }
+
     @Id
     @UuidGenerator
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,11 +39,14 @@ public class UserRole {
     public UUID getUuid() {
         return this.uuid;
     }
-    @Enumerated(EnumType.ORDINAL)
+
+    @Enumerated(EnumType.STRING)
+    @Column(unique = true)
     public Role getRole() {
         return this.role;
     }
-    @OneToMany(mappedBy = "role",cascade = {CascadeType.REMOVE,CascadeType.MERGE,CascadeType.PERSIST})
+
+    @OneToMany(mappedBy = "role", cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST})
     public List<User> getUsers() {
         return this.users;
     }

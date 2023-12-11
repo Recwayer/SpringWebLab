@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/head"/>
+<body data-bs-theme="dark" class="d-flex flex-column h-100">
+<div th:replace="fragments/navbar">Navbar</div>
+<main class="flex-shrink-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <main class="jumbotron text-center rounded col-md-12 align-self-center pt-5">
+                <div class="justify-content-center">
+                    <h1>Profile</h1>
+                </div>
+                <div class="row rounded">
+                    <div class="col-md-6" th:object="${user}">
+                        <h2>User</h2>
+                        <h4 th:text="'FirstName: ' + *{firstName}"></h4>
+                        <h4 th:text="'LastName: ' + *{lastName}"></h4>
+                        <h4 th:text="'Username: ' + *{username}"></h4>
+                        <b>User Roles: </b>
+                        <div sec:authorize="hasRole('ADMIN')">
+                            <p>User has ADMIN role</p>
+                        </div>
+                        <div sec:authorize="hasRole('USER')">
+                            <p>User has USER role</p>
+                        </div>
+                        <h2>Offers</h2>
+                        <div th:if="${user.offers!=null and not #lists.isEmpty(user.offers)}" class="">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Offer</th>
+                                    <th>Price</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="offer : ${user.offers}">
+                                    <td><a th:href="@{/offer/{uuid}(uuid=${offer.uuid})}" th:text="${offer.uuid}"></a>
+                                    </td>
+                                    <td th:text="${offer.price}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div th:unless="${user.offers != null and not #lists.isEmpty(user.offers)}">
+                            <p>No offers available</p>
+                        </div>
+                    </div>
+                  <div class="col-md-6"><img src="/img/icon.png" height="350px"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+</main>
+<footer th:replace="fragments/footer"/>
+</body>
+</html>

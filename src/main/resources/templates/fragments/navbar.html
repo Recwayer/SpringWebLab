@@ -1,4 +1,5 @@
-<nav class="navbar navbar-expand-lg justify-content-between">
+<nav class="navbar navbar-expand-lg justify-content-between"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <div class="navbar" id="navbarNavAltMarkup">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
@@ -7,15 +8,27 @@
             <li class="nav-item">
                 <a class="nav-item nav-link" href="/catalog">Catalog</a>
             </li>
-            <li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                 <a class="nav-item nav-link" href="/admin">Admin Panel</a>
             </li>
         </ul>
     </div>
     <div class="navbar ">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li>
+            <li sec:authorize="!isAuthenticated()">
                 <a class="nav-item nav-link align-items-end" href="/login">Login</a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <a class="nav-item nav-link align-items-end" href="/profile">
+                    <img th:src="@{/img/icon.png}" alt="Profile" class="profile-icon" height="35px"/>
+                </a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <form
+                        th:method="post"
+                        th:action="@{/logout}">
+                    <input class="btn btn-link nav-link" type="submit" value="Logout">
+                </form>
             </li>
         </ul>
     </div>

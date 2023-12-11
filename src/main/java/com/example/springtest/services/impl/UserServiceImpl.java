@@ -19,6 +19,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -167,5 +168,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UpdateUserDto> getUpdateUser(UUID uuid) {
         return Optional.ofNullable(modelMapper.map(userRepository.findById(uuid), UpdateUserDto.class));
+    }
+
+    @Override
+    @Transactional
+    public void changeActive(UUID uuid) {
+        User user = userRepository.findById(uuid).orElseThrow(() -> new ClientException.NotFoundException("Not Found User"));
+        user.setModified(new Date());
+        user.set_active(!user.is_active());
+        userRepository.saveAndFlush(user);
     }
 }
